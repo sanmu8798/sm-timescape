@@ -1,85 +1,89 @@
 :root {
-  /* Primary Colors - Dark Navy Series */
-  --color-primary: #1a1a2e;
-  --color-primary-light: #2d2d4a;
-  --color-secondary: #1a1a2e;
+	/* Primary Colors - Dark Navy Series */
+	--color-primary: #1a1a2e;
+	--color-primary-light: #2d2d4a;
+	--color-secondary: #1a1a2e;
 
-  --linear-gradient: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-primary) 100%);
-  --radial-gradient: radial-gradient(circle, rgba(232, 93, 76, 0.15) 0%, transparent 70%);
-  --radial-gradient-light: radial-gradient(circle, rgba(194,59,34,0.2) 0%, transparent 70%);
+	--linear-gradient: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-primary) 100%);
+	--radial-gradient: radial-gradient(circle, rgba(232, 93, 76, 0.15) 0%, transparent 70%);
+	--radial-gradient-light: radial-gradient(circle, rgba(194, 59, 34, 0.2) 0%, transparent 70%);
 
-  /* Accent Colors */
-  --accent-red: #c23b22;
-  --accent-yellow: #f0d68a;
-  --accent-gold: #d4a843;
-  --accent-blue: #0ea5e9;
-  --accent-purple: #8b5cf6;
-  --accent-green: #1d6b4e;
-  --accent-cinnabar: #e2553d;
+	/* Accent Colors */
+	--accent-red: #c23b22;
+	--accent-yellow: #f0d68a;
+	--accent-gold: #d4a843;
+	--accent-blue: #0ea5e9;
+	--accent-purple: #8b5cf6;
+	--accent-green: #1d6b4e;
+	--accent-cinnabar: #e2553d;
 
-  /* Background Colors */
-  --bg-primary: #f8f7f4;
+	/* Background Colors */
+	/* --bg-primary: #f8f7f4;
   --bg-secondary: #eeedea;
   --bg-overlay: rgba(255, 255, 255, 0.1);
-  --bg-card: #f5efe8;
+  --bg-card: #f5efe8; */
+	--bg-primary: #0e0e1a;
+	--bg-secondary: #161625;
+	--bg-card: rgba(255, 255, 255, 0.04);
+	--bg-glass: rgba(255, 255, 255, 0.06);
+	--bg-glass-strong: rgba(255, 255, 255, 0.08);
+	--bg-overlay: rgba(255, 255, 255, 0.1);
 
-  /* Text Colors */
-  --text-primary: #1a1d24;
+	/* Text Colors */
+	/* --text-primary: #1a1d24;
   --text-secondary: #64748b;
-  --text-tertiary: #94a3b8;
+  --text-tertiary: #94a3b8; */
+	--text-primary: #eef0f6;
+	--text-secondary: #8b90a8;
+	--text-tertiary: #555872;
 
-  /* Border Colors */
-  --border-color: #e2e8f0;
-  --border-color-dark: #444343;
+	/* Border Colors */
+	/* --border-color: #e2e8f0;primary
+  --border-color-dark: #444343; */
+	--border-color: rgba(255, 255, 255, 0.06);
+	--border-glow: rgba(255, 255, 255, 0.1);
 
-  /* Border Radius */
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 22px;
-  --radius-2xl: 24px;
+	/* Border Radius */
+	--radius-sm: 10px;
+	--radius-md: 14px;
+	--radius-lg: 18px;
+	--radius-xl: 22px;
+	--radius-2xl: 24px;
 
-  /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
+	/* Spacing */
+	--spacing-xs: 4px;
+	--spacing-sm: 8px;
+	--spacing-md: 16px;
+	--spacing-lg: 24px;
+	--spacing-xl: 32px;
 
-  /* Shadows */
-  --shadow-color: rgba(35, 39, 48, 0.08);
+	/* Shadows */
+	/* --shadow-color: rgba(35, 39, 48, 0.08); */
+	--shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-html, body, #app {
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-::selection {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+html,
+body,
+#app {
+	font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	background: var(--bg-primary);
+	color: var(--text-primary);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-tap-highlight-color: transparent;
 }
 
 img {
-  user-select: none;
-  -webkit-user-drag: none;
+	user-select: none;
+	-webkit-user-drag: none;
 }
 
-.tabber-page{
-  padding-bottom: 80px;
+.tabber-page {
+	padding-bottom: 80px;
 }

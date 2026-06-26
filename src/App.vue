@@ -1,27 +1,39 @@
 <template>
-  <div class="app-container">
-    <router-view />
-    <TabBar v-if="showTabBar" />
-  </div>
+	<RouterView />
+	<SmTabBar v-if="route.meta.tabbarShow" />
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import TabBar from "@/components/TabBar.vue";
+import { onMounted, watch } from "vue"
+import { useStyleTag, useWindowSize } from "@vueuse/core"
+import { useRoute } from "vue-router"
+import { SmTabBar } from "@/components"
+import { useBaseStore } from "@/stores/base"
+import { profile } from "@/mock/user"
 
-const route = useRoute();
+const route = useRoute()
 
-const HIDE_TAB_BAR_NAMES = ["Login", "Register"];
+//根据宽度决定字体大小
+const { width } = useWindowSize()
+const { css } = useStyleTag("")
+const setWidth = (width) => (css.value = `html{font-size:${width.value / 10}px}`)
 
-const showTabBar = computed(() => {
-  return !HIDE_TAB_BAR_NAMES.includes(route.name);
-});
+onMounted(() => {
+	setWidth(width)
+})
+
+const baseStore = useBaseStore()
+// demo初始登录的时候先设置为登录状态
+baseStore.setAuthToken(true)
+baseStore.setUser(profile)
+
+watch(
+	() => width,
+	() => {
+		setWidth(width)
+	},
+	{
+		deep: true,
+	},
+)
 </script>
-
-<style lang="less" scoped>
-.app-container {
-  height: 100%;
-  position: relative;
-}
-</style>

@@ -1,329 +1,526 @@
 <template>
-  <div class="page-login">
-    <div class="login-card">
-      <div class="login-brand">
-        <div class="brand-icon">
-          <Flag :size="28" />
-        </div>
-        <h1 class="brand-name">时光集</h1>
-        <p class="brand-slogan">记录旅行足迹，收藏美好时光</p>
-      </div>
+	<div class="page-login">
+		<!-- Floating Orbs -->
+		<div class="orb orb-1" />
+		<div class="orb orb-2" />
+		<div class="orb orb-3" />
 
-      <form class="login-form" @submit.prevent="handleLogin">
-        <div class="form-item">
-          <User :size="18" />
-          <input
-            v-model="state.form.account"
-            type="text"
-            placeholder="请输入账号"
-            class="form-input"
-          />
-        </div>
+		<!-- Page -->
+		<div class="login-page">
+			<!-- Brand -->
+			<div class="brand-area">
+				<div class="brand-icon-wrap">
+					<div class="brand-glow" />
+					<MapPin :size="34" color="rgba(212,168,67,0.8)" />
+				</div>
+				<div class="brand-name">时光集</div>
+				<div class="brand-slogan">SM TIMESCAPE</div>
+			</div>
 
-        <div class="form-item">
-          <Lock :size="18" />
-          <input
-            v-model="state.form.password"
-            :type="state.showPassword ? 'text' : 'password'"
-            placeholder="请输入密码"
-            class="form-input"
-          />
-          <button type="button" class="toggle-password" @click="togglePassword">
-            <Eye v-if="!state.showPassword" :size="18" />
-            <EyeOff v-else :size="18" />
-          </button>
-        </div>
+			<!-- Form Area -->
+			<div class="form-area">
+				<div class="input-group">
+					<div class="input-wrap">
+						<User class="input-icon" :size="18" />
+						<input v-model="state.account" class="input-field" type="text" placeholder="请输入账号" required />
+						<div v-if="state.account" class="input-clear" @click="state.account = ''">
+							<X :size="10" />
+						</div>
+					</div>
+				</div>
 
-        <div v-if="state.error" class="form-error">
-          <AlertCircle :size="14" />
-          <span>{{ state.error }}</span>
-        </div>
+				<div class="input-group">
+					<div class="input-wrap">
+						<KeyRound class="input-icon" :size="18" />
+						<input v-model="state.password" class="input-field" :type="state.pwdVisible ? 'text' : 'password'" placeholder="请输入密码" />
+						<div class="pwd-toggle" @click="state.pwdVisible = !state.pwdVisible">
+							<EyeOff v-if="!state.pwdVisible" :size="18" />
+							<Eye v-if="state.pwdVisible" :size="18" />
+						</div>
+					</div>
+				</div>
 
-        <button type="submit" class="login-btn" :disabled="state.loading">
-          <Loader2 v-if="state.loading" :size="18" class="loading-icon" />
-          <span>{{ state.loading ? '登录中...' : '登 录' }}</span>
-        </button>
-      </form>
+				<div>
+					<button :class="['submit-btn', 'primary', { loading: state.loading }]" @click="handleLogin">
+						<span class="btn-text">登 录</span>
+						<div class="btn-loading-spinner" />
+					</button>
+				</div>
 
-      <div class="login-options">
-        <span class="option-link">忘记密码？</span>
-        <span class="option-link">注册新账号</span>
-      </div>
+				<div>
+					<button class="submit-btn secondary" @click="handleBackHome">
+						<span class="btn-text">返回首页</span>
+					</button>
+				</div>
 
-      <div class="demo-tip">
-        <div class="demo-tip-title">
-          <Info :size="14" />
-          <span>体验账号</span>
-        </div>
-        <div class="demo-tip-content">
-          <span>账号：<code>sanmu_test</code></span>
-          <span>密码：<code>123123</code></span>
-        </div>
-      </div>
-    </div>
-  </div>
+				<div class="form-extras">
+					<span class="form-link">忘记密码？</span>
+					<span class="form-link">注册账号</span>
+				</div>
+			</div>
+
+			<!-- Terms -->
+			<div class="terms-area">
+				<div :class="['terms-wrap', { shake: state.shakeTerms }]">
+					<div :class="['terms-checkbox', { checked: state.termsAccepted }]" @click="state.termsAccepted = !state.termsAccepted">
+						<Check :size="10" />
+					</div>
+					<div class="terms-text">
+						登录即表示同意 <a href="javascript:void(0)">《用户协议》</a>和<a href="javascript:void(0)">《隐私政策》</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { Flag, User, Lock, Eye, EyeOff, AlertCircle, Loader2, Info } from 'lucide-vue-next'
-import { useUserStore } from '@/stores/index'
-import { mockUsers } from '@/mock/user'
+import { reactive } from "vue"
+import { MapPin, User, KeyRound, EyeOff, Eye, X, Check } from "lucide-vue-next"
+import { useRouter } from "vue-router"
 
 const router = useRouter()
-const userStore = useUserStore()
 
 const state = reactive({
-  form: {
-    account: 'sanmu_test',
-    password: '123123'
-  },
-  showPassword: false,
-  loading: false,
-  error: ''
+	account: "",
+	password: "",
+	pwdVisible: false,
+	termsAccepted: false,
+	loading: false,
+	shakeTerms: false,
 })
 
-const togglePassword = () => {
-  state.showPassword = !state.showPassword
+function handleLogin() {
+	if (!state.termsAccepted) {
+		state.shakeTerms = true
+		setTimeout(() => {
+			state.shakeTerms = false
+		}, 400)
+		return
+	}
+
+	state.loading = true
+
+	setTimeout(() => {
+		state.loading = false
+		// TODO: implement login logic
+	}, 2000)
 }
 
-const handleLogin = async () => {
-  const { account, password } = state.form
-  if (!account || !password) {
-    state.error = '请输入账号和密码'
-    return
-  }
-
-  state.loading = true
-  state.error = ''
-
-  try {
-    const user = mockUsers.find(u => u.phone === account && u.password === password)
-    if (!user) {
-      state.error = '账号或密码错误'
-      return
-    }
-    userStore.setUser(user)
-    router.push({ name: 'Index' })
-  } catch (e) {
-    state.error = e.message || '登录失败'
-  } finally {
-    state.loading = false
-  }
+function handleBackHome() {
+	router.push("/")
 }
-
 </script>
 
 <style lang="less" scoped>
 .page-login {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: var(--bg-primary);
+	min-height: 100vh;
+	background: var(--bg-primary);
+	color: var(--text-primary);
+	max-width: 430px;
+	margin: 0 auto;
+	overflow-x: hidden;
+	position: relative;
 
-  .login-card {
-    width: 100%;
-    max-width: 380px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
-    padding: 36px 28px;
-    box-shadow: 0 12px 40px var(--shadow-color);
-  }
+	/* Atmospheric BG */
+	&::before {
+		content: "";
+		position: fixed;
+		inset: 0;
+		background:
+			radial-gradient(ellipse at 30% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+			radial-gradient(ellipse at 70% 30%, rgba(14, 165, 233, 0.06) 0%, transparent 45%),
+			radial-gradient(ellipse at 50% 80%, rgba(212, 168, 67, 0.04) 0%, transparent 40%);
+		pointer-events: none;
+		z-index: 0;
+	}
 
-  .login-brand {
-    text-align: center;
-    margin-bottom: 32px;
+	/* Floating orbs */
+	.orb {
+		position: fixed;
+		border-radius: 50%;
+		pointer-events: none;
+		filter: blur(60px);
+		z-index: 0;
 
-    .brand-icon {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 16px;
-      border-radius: var(--radius-lg);
-      background: var(--linear-gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      box-shadow: 0 4px 16px rgba(26, 26, 46, 0.2);
-    }
+		&.orb-1 {
+			width: 200px;
+			height: 200px;
+			top: -40px;
+			right: -60px;
+			background: rgba(139, 92, 246, 0.1);
+			animation: orbFloat1 12s ease-in-out infinite;
+		}
 
-    .brand-name {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin: 0 0 6px;
-      letter-spacing: 2px;
-    }
+		&.orb-2 {
+			width: 160px;
+			height: 160px;
+			bottom: 15%;
+			left: -40px;
+			background: rgba(14, 165, 233, 0.08);
+			animation: orbFloat2 15s ease-in-out infinite;
+		}
 
-    .brand-slogan {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin: 0;
-    }
-  }
+		&.orb-3 {
+			width: 120px;
+			height: 120px;
+			top: 40%;
+			right: -30px;
+			background: rgba(212, 168, 67, 0.06);
+			animation: orbFloat3 10s ease-in-out infinite;
+		}
+	}
 
-  .login-form {
-    .form-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      transition: all 0.25s ease;
+	@keyframes orbFloat1 {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		50% {
+			transform: translate(-20px, 30px);
+		}
+	}
 
-      svg {
-        color: var(--text-tertiary);
-        flex-shrink: 0;
-      }
+	@keyframes orbFloat2 {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		50% {
+			transform: translate(25px, -20px);
+		}
+	}
 
-      &:focus-within {
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.06);
-      }
+	@keyframes orbFloat3 {
+		0%,
+		100% {
+			transform: translate(0, 0);
+		}
+		50% {
+			transform: translate(-15px, -25px);
+		}
+	}
 
-      .form-input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        outline: none;
-        color: var(--text-primary);
-        font-size: 15px;
+	/* Page Content */
+	.login-page {
+		position: relative;
+		z-index: 1;
+		min-height: calc(100vh - 28px);
+		display: flex;
+		flex-direction: column;
+		padding: 0 28px;
+	}
 
-        &::placeholder {
-          color: var(--text-tertiary);
-        }
-      }
+	/* Brand Area */
+	.brand-area {
+		padding: 48px 0 40px;
+		text-align: center;
 
-      .toggle-password {
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--text-tertiary);
-        padding: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: color 0.25s ease;
+		.brand-icon-wrap {
+			width: 72px;
+			height: 72px;
+			margin: 0 auto 20px;
+			border-radius: 20px;
+			background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+			border: 1px solid var(--border-glow);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			box-shadow:
+				0 8px 32px rgba(0, 0, 0, 0.3),
+				0 0 60px rgba(139, 92, 246, 0.06),
+				inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-        &:hover {
-          color: var(--color-primary);
-        }
-      }
-    }
+			&::before {
+				content: "";
+				position: absolute;
+				inset: -1px;
+				border-radius: 20px;
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 60%);
+				pointer-events: none;
+			}
+		}
 
-    .form-error {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 14px;
-      margin-bottom: 14px;
-      background: rgba(194, 59, 34, 0.08);
-      border: 1px solid rgba(194, 59, 34, 0.15);
-      border-radius: var(--radius-sm);
-      color: var(--accent-red);
-      font-size: 13px;
+		.brand-glow {
+			position: absolute;
+			inset: -20px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+			pointer-events: none;
+			z-index: -1;
+		}
 
-      svg {
-        flex-shrink: 0;
-      }
-    }
+		.brand-name {
+			font-family: "Noto Serif SC", serif;
+			font-size: 26px;
+			font-weight: 900;
+			color: var(--text-primary);
+			letter-spacing: 4px;
+			margin-bottom: 6px;
+		}
 
-    .login-btn {
-      width: 100%;
-      padding: 15px;
-      background: var(--linear-gradient);
-      border: none;
-      border-radius: var(--radius-md);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 16px rgba(26, 26, 46, 0.2);
+		.brand-slogan {
+			font-size: 13px;
+			color: var(--text-tertiary);
+			letter-spacing: 2px;
+		}
+	}
 
-      &:hover:not(:disabled) {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 24px rgba(26, 26, 46, 0.25);
-      }
+	/* Form Area */
+	.form-area {
+		flex: 1;
+	}
 
-      &:disabled {
-        opacity: 0.8;
-        cursor: not-allowed;
-      }
+	/* Input Group */
+	.input-group {
+		margin-bottom: 16px;
+	}
 
-      .loading-icon {
-        animation: spin 1s linear infinite;
-      }
-    }
-  }
+	.input-wrap {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		background: var(--bg-input, rgba(255, 255, 255, 0.03));
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-md);
+		padding: 0 16px;
+		transition: all 0.3s ease;
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
 
-  .login-options {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 18px;
+		&:focus-within {
+			border-color: var(--border-focus, rgba(14, 165, 233, 0.4));
+			background: rgba(14, 165, 233, 0.03);
+			box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.06);
 
-    .option-link {
-      font-size: 13px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: color 0.25s ease;
+			.input-icon {
+				color: var(--accent-blue);
+			}
+		}
 
-      &:hover {
-        color: var(--color-primary);
-      }
-    }
-  }
+		.input-icon {
+			color: var(--text-tertiary);
+			flex-shrink: 0;
+			transition: color 0.3s;
+		}
 
-  .demo-tip {
-    margin-top: 28px;
-    padding: 14px;
-    background: var(--bg-secondary);
-    border: 1px dashed var(--border-color);
-    border-radius: var(--radius-md);
+		.input-field {
+			flex: 1;
+			background: transparent;
+			background-color: transparent; // 强制覆盖浏览器默认背景
+			border: none;
+			outline: none;
+			padding: 15px 10px;
+			font-size: 15px;
+			color: var(--text-primary);
+			font-weight: 500;
+			-webkit-appearance: none; // 移除 WebKit 浏览器默认样式
+			appearance: none;
 
-    .demo-tip-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
+			&::placeholder {
+				color: var(--text-tertiary);
+				font-weight: 400;
+			}
 
-      span {
-        font-weight: 600;
-      }
-    }
+			// 自动填充时的背景色
+			&:-webkit-autofill,
+			&:-webkit-autofill:hover,
+			&:-webkit-autofill:focus {
+				-webkit-box-shadow: 0 0 0 1000px var(--bg-input, rgba(255, 255, 255, 0.03)) inset;
+				-webkit-text-fill-color: var(--text-primary);
+				transition: background-color 5000s ease-in-out 0s;
+			}
+		}
 
-    .demo-tip-content {
-      display: flex;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--text-secondary);
+		.input-clear {
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.06);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			flex-shrink: 0;
+			transition: background 0.2s;
+			color: var(--text-tertiary);
+		}
+	}
 
-      code {
-        background: rgba(26, 26, 46, 0.06);
-        padding: 2px 8px;
-        border-radius: 4px;
-        color: var(--color-primary);
-        font-family: monospace;
-      }
-    }
-  }
-}
+	/* Submit Button */
+	.submit-btn {
+		width: 100%;
+		padding: 15px;
+		border: none;
+		border-radius: var(--radius-md);
+		font-size: 15px;
+		font-weight: 700;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		position: relative;
+		overflow: hidden;
+		letter-spacing: 1px;
+		margin-top: 8px;
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+		&.primary {
+			background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+			color: var(--text-primary);
+			border: 1px solid var(--border-glow);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+			&::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 50%);
+				pointer-events: none;
+			}
+
+			&.loading {
+				pointer-events: none;
+				opacity: 0.8;
+
+				.btn-text {
+					display: none;
+				}
+
+				.btn-loading-spinner {
+					display: block;
+				}
+			}
+		}
+
+		&.secondary {
+			background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), var(--color-primary-light));
+			color: var(--text-primary);
+			border: 1px solid var(--border-glow);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+			margin-top: 10px;
+
+			&::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 50%);
+				pointer-events: none;
+			}
+		}
+
+		.btn-loading-spinner {
+			display: none;
+			width: 18px;
+			height: 18px;
+			border: 2px solid rgba(255, 255, 255, 0.2);
+			border-top-color: var(--text-primary);
+			border-radius: 50%;
+			margin: 0 auto;
+		}
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	/* Extra Links */
+	.form-extras {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 16px;
+		padding: 0 2px;
+
+		.form-link {
+			font-size: 12px;
+			color: var(--text-tertiary);
+			cursor: pointer;
+			transition: color 0.2s;
+		}
+	}
+
+	/* Terms Area */
+	.terms-area {
+		padding: 0 0 40px;
+		text-align: center;
+
+		.terms-wrap {
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			gap: 8px;
+
+			&.shake {
+				animation: shake 0.4s ease;
+			}
+		}
+
+		.terms-checkbox {
+			width: 16px;
+			height: 16px;
+			border-radius: 4px;
+			border: 1.5px solid var(--border-glow);
+			flex-shrink: 0;
+			margin-top: 1px;
+			cursor: pointer;
+			transition: all 0.25s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: transparent;
+
+			&.checked {
+				background: var(--accent-blue);
+				border-color: var(--accent-blue);
+			}
+
+			svg {
+				stroke: #fff;
+				fill: none;
+				stroke-width: 3;
+			}
+		}
+
+		.terms-text {
+			font-size: 12px;
+			color: var(--text-tertiary);
+			line-height: 1.7;
+			text-align: left;
+
+			a {
+				color: var(--accent-blue);
+				text-decoration: none;
+			}
+		}
+	}
+
+	/* Password Toggle */
+	.pwd-toggle {
+		cursor: pointer;
+		flex-shrink: 0;
+		color: var(--text-tertiary);
+		padding: 4px;
+		transition: color 0.2s;
+	}
+
+	@keyframes shake {
+		0%,
+		100% {
+			transform: translateX(0);
+		}
+		20% {
+			transform: translateX(-6px);
+		}
+		40% {
+			transform: translateX(6px);
+		}
+		60% {
+			transform: translateX(-4px);
+		}
+		80% {
+			transform: translateX(4px);
+		}
+	}
 }
 </style>

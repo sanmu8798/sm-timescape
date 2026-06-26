@@ -1,13 +1,18 @@
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router"
+
+import PageIndex from "@/views/PageIndex.vue"
+import PageDiscover from "@/views/PageDiscover.vue"
+import PageSquare from "@/views/PageSquare.vue"
+import PageProfile from "@/views/PageProfile.vue"
+import PageLogin from "@/views/PageLogin.vue"
 
 const routes = [
-  { path: '/', redirect: { name: 'Index' } },
-  { path: '/index', name: 'Index', component: () => import('@/views/PageIndex.vue') },
-  { path: '/discover', name: 'Discover', component: () => import('@/views/PageDiscover.vue') },
-  { path: '/square', name: 'Square', component: () => import('@/views/PageSquare.vue') },
-  { path: '/profile', name: 'Profile', component: () => import('@/views/PageProfile.vue') },
-  { path: '/login', name: 'Login', component: () => import('@/views/PageLogin.vue') },
-
+	{ path: "/", redirect: { name: "PageIndex" } },
+	{ path: "/index", name: "PageIndex", component: PageIndex, meta: { title: "首页", tabbarShow: true } },
+	{ path: "/discover", name: "PageDiscover", component: PageDiscover, meta: { title: "发现", tabbarShow: true } },
+	{ path: "/square", name: "PageSquare", component: PageSquare, meta: { title: "广场", tabbarShow: true } },
+	{ path: "/profile", name: "PageProfile", component: PageProfile, meta: { title: "我的", tabbarShow: true } },
+	{ path: "/login", name: "PageLogin", component: PageLogin, meta: { title: "登录" } },
 ]
 
 // 根据环境变量选择路由模式
@@ -16,9 +21,9 @@ const routes = [
 const historyMode = import.meta.env.VITE_ROUTER_MODE
 
 const router = createRouter({
-  history: historyMode === 'hash' ? createWebHashHistory() : createWebHistory(),
-  routes,
-  scrollBehavior: () => ({ top: 0 })
+	history: historyMode === "hash" ? createWebHashHistory() : createWebHistory(),
+	routes,
+	scrollBehavior: () => ({ top: 0 }),
 })
 
 export default router
