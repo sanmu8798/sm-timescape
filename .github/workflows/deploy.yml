@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]   # 当推送到 main 分支时触发
 
 permissions:
   contents: read
@@ -16,14 +16,29 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout  # 1. 拉取你的代码
         uses: actions/checkout@v4
+
+      - name: Setup Node.js  # 2. 设置 Node.js 环境（Vue 项目需要）
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies  # 3. 安装项目依赖 (npm install)
+        run: npm ci
+
+      - name: Build  # 4. 执行构建命令，生成 dist 文件夹 (npm run build)
+        run: npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - name: Upload dist
+
+      - name: Upload dist  # 5. 上传构建好的 dist 文件夹
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
