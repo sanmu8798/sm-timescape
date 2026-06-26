@@ -1,0 +1,1 @@
+import{B as o,x as l}from"./index-DCaAZOB7.js";const t="timescape_user",n=()=>{try{const e=localStorage.getItem(t);return e?JSON.parse(e):null}catch{return null}},s=e=>{try{e?localStorage.setItem(t,JSON.stringify(e)):localStorage.removeItem(t)}catch{}},S=o("user",()=>{const e=l(n());return{user:e,setUser:r=>{e.value=r,s(r)},logout:()=>{e.value=null,s(null)}}});export{S as u};
