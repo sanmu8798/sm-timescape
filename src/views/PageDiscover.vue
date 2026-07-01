@@ -43,12 +43,12 @@
 				</div>
 
 				<!-- Featured Food -->
-				<div class="page-city__food-featured" @click="onAlert()">
+				<div class="page-city__food-featured" @click="goFood(state.foodsList[0].id)">
 					<div class="page-city__food-featured-bg">
 						<div class="page-city__food-featured-tag">今日必吃</div>
 						<div class="page-city__food-featured-info">
 							<h2 class="page-city__food-featured-name">{{ state.foodsList[0].name }}</h2>
-							<p class="page-city__food-featured-origin">{{ state.foodsList[0].story.substring(0, 50) }}...</p>
+							<p class="page-city__food-featured-origin">{{ state.foodsList[0].summary }}...</p>
 							<div class="page-city__food-featured-meta">
 								<span class="page-city__food-featured-rating"> <Star :size="12" /> {{ state.foodsList[0].rating }} </span>
 								<span class="page-city__food-featured-city">{{ state.foodsList[0].city }}</span>
@@ -62,7 +62,7 @@
 					<span class="page-city__section-more" @click="onAlert()">查看全部</span>
 				</div>
 				<div class="page-city__food-list">
-					<div v-for="(item, index) in state.foodsList.slice(1)" :key="index" class="page-city__food-item" @click="onAlert()">
+					<div v-for="(item, index) in state.foodsList.slice(1)" :key="index" class="page-city__food-item" @click="goFood(item.id)">
 						<div class="page-city__food-item-img">
 							<img :src="item.image" :alt="item.name" loading="lazy" />
 							<div :class="['page-city__food-item-badge', item.checked ? 'done' : 'pending']">
@@ -72,7 +72,7 @@
 						<div class="page-city__food-item-body">
 							<h3 class="page-city__food-item-name">{{ item.name }}</h3>
 							<p class="page-city__food-item-city">{{ item.city }}</p>
-							<p class="page-city__food-item-story">{{ item.story.substring(0, 60) }}...</p>
+							<p class="page-city__food-item-story">{{ item.summary }}...</p>
 							<div class="page-city__food-item-footer">
 								<span class="page-city__food-item-rating"> <Star :size="10" /> {{ item.rating }} </span>
 								<span class="page-city__food-item-checkins">{{ item.checkIns }}人打卡</span>
@@ -96,7 +96,7 @@
 				</div>
 
 				<div class="page-city__spot-list">
-					<div v-for="(item, index) in state.spotsList" :key="index" class="page-city__spot-card" @click="onAlert()">
+					<div v-for="(item, index) in state.spotsList" :key="index" class="page-city__spot-card" @click="goSpot(item.id)">
 						<div class="page-city__spot-hero">
 							<img :src="item.image" :alt="item.name" class="page-city__spot-hero-img" loading="lazy" />
 							<div class="page-city__spot-hero-overlay" />
@@ -138,10 +138,10 @@
 				</div>
 
 				<!-- Featured Custom -->
-				<div class="page-city__custom-featured" @click="onAlert()">
+				<div class="page-city__custom-featured" @click="goCustom(state.customsList[0].id)">
 					<div class="page-city__custom-featured-tag">今日故事</div>
 					<h2 class="page-city__custom-featured-title">{{ state.customsList[0].name }}</h2>
-					<p class="page-city__custom-featured-excerpt">{{ state.customsList[0].story.substring(0, 100) }}...</p>
+					<p class="page-city__custom-featured-excerpt">{{ state.customsList[0].summary }}...</p>
 					<div class="page-city__custom-featured-meta">
 						<span class="page-city__custom-author">{{ state.customsList[0].city }}</span>
 						<span class="page-city__custom-read-more">阅读全文</span>
@@ -154,14 +154,14 @@
 				</div>
 
 				<div class="page-city__custom-list">
-					<div v-for="(item, index) in state.customsList.slice(1)" :key="index" class="page-city__custom-card" @click="onAlert()">
+					<div v-for="(item, index) in state.customsList.slice(1)" :key="index" class="page-city__custom-card" @click="goCustom(item.id)">
 						<div class="page-city__custom-card-content">
 							<div class="page-city__custom-card-tags">
 								<span v-for="tag in item.tags" :key="tag" class="page-city__custom-card-tag">{{ tag }}</span>
 							</div>
 							<h3 class="page-city__custom-card-title">{{ item.name }}</h3>
 							<p class="page-city__custom-card-region">{{ item.city }} · {{ item.province }}</p>
-							<p class="page-city__custom-card-excerpt">{{ item.story.substring(0, 80) }}...</p>
+							<p class="page-city__custom-card-excerpt">{{ item.summary }}...</p>
 						</div>
 						<div class="page-city__custom-card-thumb">
 							<img :src="item.image" :alt="item.name" loading="lazy" />
@@ -198,7 +198,7 @@
 								v-for="(item, index) in state.hotCities"
 								:key="index"
 								:class="['page-city__city-item', { active: user.current_city === item }]"
-								@click="onAlert()"
+								@click="goCityByName(item)"
 							>
 								{{ item }}
 							</div>
@@ -207,7 +207,12 @@
 					<div class="page-city__modal-section">
 						<p class="page-city__modal-section-title">按省份浏览</p>
 						<div class="page-city__province-list">
-							<div v-for="(item, index) in state.provinces" :key="index" class="page-city__province-item" @click="onAlert()">
+							<div
+								v-for="(item, index) in state.provinces"
+								:key="index"
+								class="page-city__province-item"
+								@click="goCityByName(item.city)"
+							>
 								{{ item.name }}
 							</div>
 						</div>
@@ -219,10 +224,12 @@
 </template>
 
 <script setup>
-import { reactive, computed } from "vue"
+import { reactive, computed, onMounted } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import { MapPin, ChevronDown, Search, X, Star, UtensilsCrossed, Mountain, Palette } from "lucide-vue-next"
 import { foodsList, spotsList, customsList, hotCities } from "@/mock/discover"
 import { provinces } from "@/mock/base"
+import { cities } from "@/mock/destinations"
 import { useBaseStore } from "@/stores/base"
 import { showToast } from "vant"
 
@@ -244,14 +251,35 @@ const state = reactive({
 	provinces,
 })
 
+const router = useRouter()
+const route = useRoute()
 const baseStore = useBaseStore()
 const user = computed(() => baseStore.user)
+
+onMounted(() => {
+	const tab = route.query.tab
+	if (tab && ["food", "spot", "custom"].includes(tab)) {
+		state.activeTab = tab
+	}
+})
 
 const onAlert = () => {
 	showToast({
 		message: "功能尚未开发，敬请期待",
 		icon: "warning-o",
 	})
+}
+
+const goFood = (id) => router.push({ name: "PageFoodDetail", params: { id } })
+const goSpot = (id) => router.push({ name: "PageDestinationDetail", params: { id } })
+const goCustom = (id) => router.push({ name: "PageCustomDetail", params: { id } })
+const goCityByName = (name) => {
+	const city = cities.find((item) => item.name === name)
+	if (city) {
+		router.push({ name: "PageCityDetail", params: { id: city.id } })
+	} else {
+		onAlert()
+	}
 }
 </script>
 

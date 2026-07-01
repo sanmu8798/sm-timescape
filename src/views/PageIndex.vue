@@ -68,25 +68,25 @@
 		<div class="main-content">
 			<!-- Quick Actions -->
 			<div class="quick-actions">
-				<div class="quick-action" @click="onAlert()">
+				<div class="quick-action" @click="goCheckInRecord()">
 					<div class="quick-action-icon red">
 						<Globe :size="22" />
 					</div>
 					<span class="quick-action-label">点亮地图</span>
 				</div>
-				<div class="quick-action" @click="onAlert()">
+				<div class="quick-action" @click="goBadges()">
 					<div class="quick-action-icon gold">
 						<Trophy :size="22" />
 					</div>
 					<span class="quick-action-label">成就墙</span>
 				</div>
-				<div class="quick-action" @click="onAlert()">
+				<div class="quick-action" @click="goDiscoverFood()">
 					<div class="quick-action-icon cinnabar">
 						<Utensils :size="22" />
 					</div>
 					<span class="quick-action-label">美食图鉴</span>
 				</div>
-				<div class="quick-action" @click="onAlert()">
+				<div class="quick-action" @click="goCheckInRecord()">
 					<div class="quick-action-icon purple">
 						<Footprints :size="22" />
 					</div>
@@ -121,13 +121,13 @@
 					<Sparkles :size="20" />
 					热门目的地
 				</div>
-				<div class="section-more" @click="onAlert()">
+				<div class="section-more" @click="goDiscover()">
 					查看全部
 					<ChevronRight :size="14" />
 				</div>
 			</div>
 			<div class="destinations-scroll">
-				<div v-for="(item, index) in state.featuredCities" :key="index" class="dest-card" @click="onAlert()">
+				<div v-for="(item, index) in state.featuredCities" :key="index" class="dest-card" @click="goCity(item.id)">
 					<img :src="item.image" :alt="item.name" class="dest-img" loading="lazy" />
 					<div class="dest-overlay">
 						<div class="dest-info">
@@ -154,13 +154,13 @@
 					<Utensils :size="20" />
 					美食发现
 				</div>
-				<div class="section-more" @click="onAlert()">
+				<div class="section-more" @click="goDiscoverFood()">
 					更多美食
 					<ChevronRight :size="14" />
 				</div>
 			</div>
 			<div class="food-list">
-				<div v-for="(item, index) in state.featuredFood" :key="index" class="food-item" @click="onAlert()">
+				<div v-for="(item, index) in state.featuredFood" :key="index" class="food-item" @click="goFood(item.id)">
 					<img :src="item.image" :alt="item.name" class="food-img" loading="lazy" />
 					<div class="food-content">
 						<div class="food-header">
@@ -185,7 +185,7 @@
 					<Footprints :size="20" />
 					最近印迹
 				</div>
-				<div class="section-more" @click="onAlert()">
+				<div class="section-more" @click="goCheckInRecord()">
 					查看全部
 					<ChevronRight :size="14" />
 				</div>
@@ -197,7 +197,7 @@
 						<div class="footprint-node"></div>
 						<div class="footprint-month" v-if="showMonthLabel(id)">{{ formatMonth(item.time) }}</div>
 					</div>
-					<div class="footprint-card" @click="onAlert()">
+					<div class="footprint-card" @click="goAttraction(item.id)">
 						<img :src="item.image" :alt="item.name" class="footprint-img" loading="lazy" />
 						<div class="footprint-info">
 							<div class="footprint-name">{{ item.name }}</div>
@@ -267,7 +267,14 @@ const onAlert = () => {
 		icon: "warning-o",
 	})
 }
-const goLogin = () => router.push({ name: "login" })
+const goLogin = () => router.push({ name: "PageLogin" })
+const goCity = (id) => router.push({ name: "PageCityDetail", params: { id } })
+const goFood = (id) => router.push({ name: "PageFoodDetail", params: { id } })
+const goAttraction = (id) => router.push({ name: "PageDestinationDetail", params: { id } })
+const goDiscover = () => router.push({ name: "PageDiscover" })
+const goDiscoverFood = () => router.push({ name: "PageDiscover", query: { tab: "food" } })
+const goBadges = () => router.push({ name: "PageBadges" })
+const goCheckInRecord = () => router.push({ name: "PageCheckInRecord" })
 </script>
 
 <style lang="less" scoped>
@@ -464,15 +471,18 @@ const goLogin = () => router.push({ name: "login" })
 				flex: 1;
 				background: var(--bg-card);
 				border-radius: var(--radius-lg);
-				padding: 5px 8px;
+				padding: 12px 8px 10px;
 				text-align: center;
 				cursor: pointer;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 
 				.quick-action-icon {
-					width: 44px;
-					height: 44px;
-					margin: 0 auto 6px;
-					border-radius: 14px;
+					width: 40px;
+					height: 40px;
+					margin: 0 auto 8px;
+					border-radius: 12px;
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -594,6 +604,13 @@ const goLogin = () => router.push({ name: "login" })
 			margin-bottom: 20px;
 			scroll-snap-type: x mandatory;
 			-webkit-overflow-scrolling: touch;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+
+			-ms-overflow-style: none;
+			scrollbar-width: none;
 
 			.dest-card {
 				min-width: 200px;
@@ -876,6 +893,7 @@ const goLogin = () => router.push({ name: "login" })
 						position: relative;
 						z-index: 2;
 						box-shadow: 0 0 0 4px rgba(212, 168, 67, 0.08);
+						background-color: var(--bg-primary);
 					}
 
 					.footprint-month {

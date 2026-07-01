@@ -4,21 +4,21 @@
 
 ## 核心依赖导入
 
-| 依赖   | 导入路径                                                                  | 用途             |
-|------|-----------------------------------------------------------------------|----------------|
-| 路由函数 | `import { useRouter } from 'vue-router'`                                    | **必须**，禁止硬编码路径 |
-| 主题   | `import { useTheme } from '@/components/common/theme/theme-provider'` | 表格尺寸           |
+| 依赖     | 导入路径                                                              | 用途                     |
+| -------- | --------------------------------------------------------------------- | ------------------------ |
+| 路由函数 | `import { useRouter } from 'vue-router'`                              | **必须**，禁止硬编码路径 |
+| 主题     | `import { useTheme } from '@/components/common/theme/theme-provider'` | 表格尺寸                 |
 
 ---
 
 ## 命名规范
 
-| 类型       | 格式         | 示例                                    |
-|----------|------------|---------------------------------------|
-| 页面文件     | PascalCase | `PageHome.vue`, `PageLogin.vue`      |
+| 类型       | 格式       | 示例                                  |
+| ---------- | ---------- | ------------------------------------- |
+| 页面文件   | PascalCase | `PageHome.vue`, `PageLogin.vue`       |
 | Hooks 文件 | kebab-case | `use-pro-table-data.js`               |
-| 变量/函数    | camelCase  | `const userId = 1;`                   |
-| 组件函数     | PascalCase | `export default function OrderPage()` |
+| 变量/函数  | camelCase  | `const userId = 1;`                   |
+| 组件函数   | PascalCase | `export default function OrderPage()` |
 
 ---
 
@@ -28,19 +28,20 @@
 
 ```vue
 <template>
-  <!-- 模板内容 -->
+	<!-- 模板内容 -->
 </template>
 
 <script setup>
-  // 脚本内容
+// 脚本内容
 </script>
 
 <style lang="less" scoped>
-  // 样式内容
+// 样式内容
 </style>
 ```
 
 **规则说明**：
+
 1. `<template>` 必须在最前面
 2. `<script setup>` 在中间
 3. `<style lang="less" scoped>` 在最后面
@@ -78,21 +79,21 @@ const refTable = ref(null)
 
 // 其他变量使用reactive
 const state = reactive({
-    showEditTable: false,
-    form: {
-        userId: 0,
-        title: "",
-        content: "",
-    },
+	showEditTable: false,
+	form: {
+		userId: 0,
+		title: "",
+		content: "",
+	},
 })
 
 // ❌ 错误：变量定义太多
 const showEditTable = ref(false)
 
 const form = reactive({
-    userId: 0,
-    title: "",
-    content: "",
+	userId: 0,
+	title: "",
+	content: "",
 })
 ```
 
@@ -109,16 +110,16 @@ const form = reactive({
 ## HTTP 请求规范
 
 ```js
-const { get, post, loading } = useHttp();
+const { get, post, loading } = useHttp()
 
 // ✅ 正确：GET 参数传递给 route()
-const res = await get(route('api.manager.order.items', { page: 1, pageSize: 20 }));
+const res = await get(route("api.manager.order.items", { page: 1, pageSize: 20 }))
 
 // ❌ 错误：参数传递给 get()
-const res = await get(route('api.manager.order.items'), { page: 1 });
+const res = await get(route("api.manager.order.items"), { page: 1 })
 
 // ❌ 错误：硬编码路径
-const res = await get('/api/v1/manager/order/items');
+const res = await get("/api/v1/manager/order/items")
 ```
 
 ### 响应处理
@@ -138,7 +139,8 @@ const res = await get('/api/v1/manager/order/items');
 <style lang="less" scoped>
 
 <!-- ❌ 错误：不使用 scoped 或不用 Less -->
-<style scoped></style>
+<style scoped>
+</style>
 ```
 
 ### 5.2 样式嵌套规范
@@ -148,39 +150,43 @@ const res = await get('/api/v1/manager/order/items');
 ```less
 // ✅ 正确：深层次嵌套
 .index-page {
-  .header-section {
-    .nav-menu {
-      .nav-item {
-        // 样式
-      }
-    }
-  }
-  
-  .content-section {
-    .sidebar {
-      .menu-item {
-        // 样式
-      }
-    }
-    
-    .main-container {
-      .post-card {
-        .card-header {
-          // 样式
-        }
-        .card-body {
-          // 样式
-        }
-      }
-    }
-  }
+	.header-section {
+		.nav-menu {
+			.nav-item {
+				// 样式
+			}
+		}
+	}
+
+	.content-section {
+		.sidebar {
+			.menu-item {
+				// 样式
+			}
+		}
+
+		.main-container {
+			.post-card {
+				.card-header {
+					// 样式
+				}
+				.card-body {
+					// 样式
+				}
+			}
+		}
+	}
 }
 
 // ❌ 错误：平铺写法，容易污染全局样式
-.header-section {}
-.nav-menu {}
-.nav-item {}
-.content-section {}
+.header-section {
+}
+.nav-menu {
+}
+.nav-item {
+}
+.content-section {
+}
 ```
 
 ### 5.3 样式变量使用
@@ -190,37 +196,38 @@ const res = await get('/api/v1/manager/order/items');
 ```less
 // ✅ 正确：使用 CSS 变量
 .post-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-md);
-  
-  &:hover {
-    background: var(--bg-hover);
-    box-shadow: var(--shadow-md);
-  }
-  
-  .card-title {
-    color: var(--text-primary);
-    font-size: var(--font-size-lg);
-  }
+	background: var(--bg-card);
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-lg);
+	padding: var(--spacing-md);
+
+	&:hover {
+		background: var(--bg-hover);
+		box-shadow: var(--shadow-md);
+	}
+
+	.card-title {
+		color: var(--text-primary);
+		font-size: var(--font-size-lg);
+	}
 }
 
 // ❌ 错误：硬编码样式值
 .post-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 16px;
-  
-  .card-title {
-    color: #ffffff;
-    font-size: 18px;
-  }
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 12px;
+	padding: 16px;
+
+	.card-title {
+		color: #ffffff;
+		font-size: 18px;
+	}
 }
 ```
 
 ### 5.4 样式文件位置
+
 基础样式及变量定义在 `src/style.css` 中，请多采用变量开发页面，减少硬编码样式，如果已有的变量样式不符合需求，可以添加新的变量，但是禁止更改已有的变量。
 
 ### 5.5 常用 CSS 变量
@@ -250,6 +257,12 @@ const res = await get('/api/v1/manager/order/items');
 --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
 ```
 
+### 5.6 样式使用
+
+1、能使用css变量的就尽量使用css变量，避免使用硬编码样式值
+2、如果是移动端的页面，就不要定义hover等伪类样式，因为移动端没有鼠标悬停事件
+3、如果没有要求，就不需要定义响应式样式
+
 ---
 
 ## 图标使用规范
@@ -258,19 +271,27 @@ const res = await get('/api/v1/manager/order/items');
 
 ```vue
 <template>
-    <!-- ✅ 正确：使用 lucide 图标 -->
-    <Home :size="20"/>
-    <User :size="24" color="#667eea"/>
-    <Heart class="icon-heart"/>
+	<!-- ✅ 正确：使用 lucide 图标 -->
+	<Home :size="20" />
+	<User :size="24" color="#667eea" />
+	<Heart class="icon-heart" />
 
-    <!-- ❌ 错误：自定义 SVG -->
-    <svg>...</svg>
+	<!-- ❌ 错误：自定义 SVG -->
+	<svg>...</svg>
 </template>
 
 <script setup>
-    import {Home, User, Settings, Heart} from 'lucide-vue-next'
+import { Home, User, Settings, Heart } from "lucide-vue-next"
 </script>
 ```
+
+---
+
+## 外部依赖引入规范
+
+1. **查找优先**：如需引入其他文件方法，请先查找文件方法来源，避免硬编码找不到位置
+2. **路由跳转**：必须使用 `useRouter`，禁止硬编码路径如 `router.push("/page")`，应使用 `router.push({ name: "PageName" })`
+3. **组件引入**：优先从 `@/components` 统一入口引入，避免深层相对路径
 
 ---
 
@@ -291,12 +312,31 @@ resources/js/mock/
 使用方式：
 
 ```js
-import {recommendedPosts, hotPosts} from '@/js/mock/client/index.js'
+import { recommendedPosts, hotPosts } from "@/js/mock/client/index.js"
 
 const state = reactive({
-    posts: recommendedPosts,
-    hotList: hotPosts,
+	posts: recommendedPosts,
+	hotList: hotPosts,
 })
 ```
+
+### 数据统一性原则
+
+Mock 数据必须严格遵守数据关联一致性原则：
+
+- 不同数据表之间的关联字段（如 `city_id`、`type_id`、`user_id` 等）必须与对应数据的 `id` 保持一致
+- 示例：首页热门城市目的地数据 `id` 为 1，关联的目的地数据 `city_id` 即为 1；如果另一份数据引用北京时，对应的 `id` 也应为 1
+- 不同数据若还有关联则继续同步 `type_id` 与对应数据 `id` 一致
+- 原因：后续开发数据库数据表时，数据会严格参照 mock 数据进行开发，保持数据一致性可避免后期联调问题
+
+---
+
+## 开发流程规范
+
+1. **编译测试**：编写完页面后不要自己执行 `npm run dev` 启动开发服务器，由用户自行启动编译查看效果，可适当提醒用户启动编译
+2. **风格参照**：编写页面时，请参照项目原有页面的风格及写法；如没有可参照的页面时，再按常规写法进行编写
+3. **局部替换原则**：如没有明显提醒是重新编写或者重构时，请严格遵守局部替换代码规则（search replace），不要重新编写整个文件
+4. **用户代码保护**：开发过程中如果发现用户有更改、删除代码等行为，请先询问用户是否恢复原代码，而不是主动恢复或补充代码
+5. **前后端规则分离**：后续开发中，如果用户有指令记录规则的话，请自动区别前后端写法规则，并记录在对应的规则文件里
 
 ---

@@ -38,7 +38,7 @@
 						<div class="square-post-meta">
 							<span>{{ item.time }}</span>
 							<span v-if="item.city" class="square-meta-dot" />
-							<span v-if="item.city">{{ item.city }}</span>
+							<span v-if="item.city" class="square-post-city" @click="goCityByName(item.city)">{{ item.city }}</span>
 						</div>
 					</div>
 					<button v-if="!item.isOfficial" class="square-post-follow">+ 关注</button>
@@ -133,8 +133,10 @@
 
 <script setup>
 import { reactive } from "vue"
+import { useRouter } from "vue-router"
 import { MapPin, Heart, MessageCircle, Star, Share2 } from "lucide-vue-next"
 import { squareFilters, squareTopics, squarePosts } from "@/mock/square"
+import { cities } from "@/mock/destinations"
 
 const state = reactive({
 	activeFilter: "推荐",
@@ -142,6 +144,15 @@ const state = reactive({
 	squareTopics,
 	squarePosts,
 })
+
+const router = useRouter()
+
+const goCityByName = (name) => {
+	const city = cities.find((item) => item.name === name)
+	if (city) {
+		router.push({ name: "PageCityDetail", params: { id: city.id } })
+	}
+}
 
 const formatCount = (count) => {
 	if (count >= 1000) return (count / 1000).toFixed(1) + "k"
@@ -350,20 +361,25 @@ const formatCount = (count) => {
 				}
 
 				.square-post-meta {
-					font-size: 11px;
-					color: var(--text-tertiary);
-					margin-top: 3px;
-					display: flex;
-					align-items: center;
-					gap: 6px;
+						font-size: 11px;
+						color: var(--text-tertiary);
+						margin-top: 3px;
+						display: flex;
+						align-items: center;
+						gap: 6px;
 
-					.square-meta-dot {
-						width: 2px;
-						height: 2px;
-						background: var(--text-tertiary);
-						border-radius: 50%;
+						.square-meta-dot {
+							width: 2px;
+							height: 2px;
+							background: var(--text-tertiary);
+							border-radius: 50%;
+						}
+
+						.square-post-city {
+							color: var(--accent-blue);
+							cursor: pointer;
+						}
 					}
-				}
 			}
 
 			.square-post-follow {

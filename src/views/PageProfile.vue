@@ -24,11 +24,11 @@
 						<div class="data-value">{{ user.visited_provinces }}</div>
 						<div class="data-label">点亮省份</div>
 					</div>
-					<div class="data-item">
+					<div class="data-item" @click="goCheckInRecord">
 						<div class="data-value">{{ user.check_in_count }}</div>
 						<div class="data-label">打卡记录</div>
 					</div>
-					<div class="data-item">
+					<div class="data-item" @click="goBadges">
 						<div class="data-value">{{ user.badge_count }}</div>
 						<div class="data-label">获得徽章</div>
 					</div>
@@ -75,7 +75,7 @@
 						<ChevronRight :size="16" />
 					</div>
 				</div>
-				<div class="entry-card entry-card-wide">
+				<div class="entry-card entry-card-wide" @click="goBadges">
 					<div class="entry-icon entry-icon--gold">
 						<Award :size="18" />
 					</div>
@@ -87,7 +87,7 @@
 						<ChevronRight :size="16" />
 					</div>
 				</div>
-				<div class="entry-card entry-card-wide">
+				<div class="entry-card entry-card-wide" @click="goCheckInRecord">
 					<div class="entry-icon entry-icon--blue">
 						<Clock :size="18" />
 					</div>
@@ -163,11 +163,16 @@
 
 <script setup>
 import { computed } from "vue"
+import { useRouter } from "vue-router"
 import { ChevronRight, Star, FileText, Zap, Award, Clock, User, Shield, HelpCircle, Info } from "lucide-vue-next"
 import { useBaseStore } from "@/stores/base"
 
+const router = useRouter()
 const baseStore = useBaseStore()
 const user = computed(() => baseStore.user)
+
+const goBadges = () => router.push({ name: "PageBadges" })
+const goCheckInRecord = () => router.push({ name: "PageCheckInRecord" })
 </script>
 
 <style lang="less" scoped>

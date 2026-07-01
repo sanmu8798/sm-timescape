@@ -90,7 +90,7 @@ processPage()
 
 const switchTab = (index, pageName) => {
 	if (index === 2) {
-		state.currentItem = null
+		router.push({ name: "PageCheckIn" })
 	} else {
 		state.currentTabbarIndex = index
 		router.push({ name: pageName })
