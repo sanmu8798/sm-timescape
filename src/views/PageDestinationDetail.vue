@@ -137,7 +137,10 @@
 					</div>
 					<div class="badge-progress">
 						<div class="progress-ring">
-							<div class="progress-fill" :style="{ background: `conic-gradient(var(--accent-gold) ${item.progress * 360}deg, rgba(255,255,255,0.08) 0deg)` }" />
+							<div
+								class="progress-fill"
+								:style="{ background: `conic-gradient(var(--accent-gold) ${item.progress * 360}deg, rgba(255,255,255,0.08) 0deg)` }"
+							/>
 							<div class="progress-inner">{{ Math.round(item.progress * 100) }}%</div>
 						</div>
 					</div>

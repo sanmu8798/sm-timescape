@@ -5,9 +5,7 @@ import { attractions, foods, customs } from "./destinations"
 
 function getCheckedTargets(cityId, targetType) {
 	return new Set(
-		checkins
-			.filter((item) => String(item.city_id) === String(cityId) && item.target_type === targetType)
-			.map((item) => String(item.target_id))
+		checkins.filter((item) => String(item.city_id) === String(cityId) && item.target_type === targetType).map((item) => String(item.target_id)),
 	)
 }
 
@@ -36,11 +34,7 @@ function calculateSpecialBadgeProgress(badge) {
 		case 102:
 			return checkins.some((item) => item.target_type === "attraction" && String(item.target_id) === "102") ? 1 : 0
 		case 103:
-			return checkins.some(
-				(item) => item.target_type === "food" && ["205", "211"].includes(String(item.target_id))
-			)
-				? 1
-				: 0
+			return checkins.some((item) => item.target_type === "food" && ["205", "211"].includes(String(item.target_id))) ? 1 : 0
 		default:
 			return badge.progress || 0
 	}

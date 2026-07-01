@@ -361,25 +361,25 @@ const formatCount = (count) => {
 				}
 
 				.square-post-meta {
-						font-size: 11px;
-						color: var(--text-tertiary);
-						margin-top: 3px;
-						display: flex;
-						align-items: center;
-						gap: 6px;
+					font-size: 11px;
+					color: var(--text-tertiary);
+					margin-top: 3px;
+					display: flex;
+					align-items: center;
+					gap: 6px;
 
-						.square-meta-dot {
-							width: 2px;
-							height: 2px;
-							background: var(--text-tertiary);
-							border-radius: 50%;
-						}
-
-						.square-post-city {
-							color: var(--accent-blue);
-							cursor: pointer;
-						}
+					.square-meta-dot {
+						width: 2px;
+						height: 2px;
+						background: var(--text-tertiary);
+						border-radius: 50%;
 					}
+
+					.square-post-city {
+						color: var(--accent-blue);
+						cursor: pointer;
+					}
+				}
 			}
 
 			.square-post-follow {

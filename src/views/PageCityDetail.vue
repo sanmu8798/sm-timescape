@@ -159,7 +159,10 @@
 					</div>
 					<div class="badge-progress">
 						<div class="progress-ring">
-							<div class="progress-fill" :style="{ background: `conic-gradient(var(--accent-gold) ${item.progress * 360}deg, rgba(255,255,255,0.08) 0deg)` }" />
+							<div
+								class="progress-fill"
+								:style="{ background: `conic-gradient(var(--accent-gold) ${item.progress * 360}deg, rgba(255,255,255,0.08) 0deg)` }"
+							/>
 							<div class="progress-inner">{{ Math.round(item.progress * 100) }}%</div>
 						</div>
 					</div>
@@ -184,11 +187,24 @@
 <script setup>
 import { computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { ChevronLeft, Share2, Star, MapPinned, Mountain, UtensilsCrossed, Sparkles, Award, ChevronRight, MapPin, MessageCircle, MessageSquare, Heart } from "lucide-vue-next"
+import {
+	ChevronLeft,
+	Share2,
+	Star,
+	MapPinned,
+	Mountain,
+	UtensilsCrossed,
+	Sparkles,
+	Award,
+	ChevronRight,
+	MapPin,
+	MessageCircle,
+	MessageSquare,
+	Heart,
+} from "lucide-vue-next"
 import { getCityById, getAttractionsByCityId, getFoodsByCityId, getCustomsByCityId } from "@/mock/destinations"
 import { getBadgesByCityId } from "@/mock/badges"
 import { getCommentsByTarget } from "@/mock/comments"
-import { getCheckinsByTarget } from "@/mock/checkins"
 
 const route = useRoute()
 const router = useRouter()
@@ -200,8 +216,6 @@ const foods = computed(() => getFoodsByCityId(cityId.value))
 const customs = computed(() => getCustomsByCityId(cityId.value))
 const comments = computed(() => getCommentsByTarget("city", cityId.value))
 const commentCount = computed(() => comments.value.length)
-const checkins = computed(() => getCheckinsByTarget("city", cityId.value))
-const checkinCount = computed(() => checkins.value.length)
 const cityBadges = computed(() => getBadgesByCityId(cityId.value).filter((item) => item.progress > 0 || item.id <= 6))
 
 function goAttraction(id) {
