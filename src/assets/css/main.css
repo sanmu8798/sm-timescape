@@ -44,19 +44,19 @@ img {
   color: var(--text-secondary);
   font-style: italic;
 }
-.rich-text .story-figure {
+.rich-text figure {
   margin: 14px 0;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border-color);
 }
-.rich-text .story-figure img {
+.rich-text figure img {
   width: 100%;
   height: 180px;
   object-fit: cover;
   display: block;
 }
-.rich-text .story-figure figcaption {
+.rich-text figure figcaption {
   padding: 8px 12px;
   font-size: 11px;
   color: var(--text-tertiary);

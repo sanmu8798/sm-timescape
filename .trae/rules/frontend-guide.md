@@ -1,13 +1,12 @@
 # 前端开发指南
 
-> 前端编码规范，适用于所有基于 SM 的项目。
+> 前端编码规范，适用于所有基于 vite + less + pinia 的项目。
 
-## 核心依赖导入
+## 导入规范
 
-| 依赖     | 导入路径                                                              | 用途                     |
-| -------- | --------------------------------------------------------------------- | ------------------------ |
-| 路由函数 | `import { useRouter } from 'vue-router'`                              | **必须**，禁止硬编码路径 |
-| 主题     | `import { useTheme } from '@/components/common/theme/theme-provider'` | 表格尺寸                 |
+| 依赖     | 导入路径                                           | 用途                                                 |
+| -------- | -------------------------------------------------- | ---------------------------------------------------- |
+| 公共函数 | `import { setStorage, getStorage } from "@/hooks"` | **查看vite.config.js是否有快捷配置**，禁止硬编码路径 |
 
 ---
 
@@ -53,13 +52,13 @@
 ```js
 // ✅ 正确：命名函数导出
 const getPublicImage = () => {
-    return xxx
-};
-export default getPublicImage;
+	return xxx
+}
+export { getPublicImage }
 
 // ❌ 错误：箭头函数组件
 export default function getPublicImage() {
-    return xxx
+	return xxx
 }
 ```
 
@@ -299,6 +298,7 @@ import { Home, User, Settings, Heart } from "lucide-vue-next"
 ## Mock 数据规范
 
 暂无接口的数据不要写死在页面中，统一放在 `resources/js/mock` 目录下：
+1、mock文件里面的数据都是以后编写后端接口时返回的数据，所以结构不要乱写，需要合理组织；
 
 ```
 resources/js/mock/

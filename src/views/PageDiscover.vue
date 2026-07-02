@@ -109,7 +109,7 @@
 							</div>
 						</div>
 						<div class="page-city__spot-card-body">
-							<p class="page-city__spot-desc">{{ item.story.substring(0, 80) }}...</p>
+							<p class="page-city__spot-desc">{{ item.brief?.substring(0, 80) }}...</p>
 							<div class="page-city__spot-card-meta">
 								<div class="page-city__spot-rating">
 									<span class="page-city__spot-rating-score">{{ item.rating }}</span>
@@ -783,11 +783,12 @@ const goCityByName = (name) => {
 			margin: 8px var(--spacing-md) var(--spacing-md);
 			background: var(--linear-gradient);
 			border-radius: var(--radius-lg);
-			padding: var(--spacing-lg);
+			padding: var(--spacing-md);
 			position: relative;
 			overflow: hidden;
 			cursor: pointer;
 			border: 1px solid var(--border);
+			padding-top: 50px;
 
 			&::before {
 				content: "";
@@ -801,15 +802,17 @@ const goCityByName = (name) => {
 			}
 
 			.page-city__custom-featured-tag {
-				display: inline-block;
-				padding: 3px 10px;
-				background: var(--accent-glow, rgba(35, 39, 48, 0.05));
-				color: var(--color-primary-light);
+				position: absolute;
+				top: var(--spacing-md);
+				left: var(--spacing-md);
+				background: rgba(0, 0, 0, 0.4);
+				backdrop-filter: blur(8px);
+				padding: 4px 10px;
 				border-radius: 20px;
 				font-size: 10px;
+				color: rgba(255, 255, 255, 0.8);
 				font-weight: 600;
-				margin-bottom: var(--spacing-md);
-				border: 1px solid var(--border);
+				border: 1px solid rgba(255, 255, 255, 0.08);
 			}
 
 			.page-city__custom-featured-title {
@@ -878,7 +881,7 @@ const goCityByName = (name) => {
 						font-size: 9px;
 						font-weight: 600;
 						background: rgba(35, 39, 48, 0.05);
-						color: var(--color-primary-light);
+						color: var(--text-tertiary);
 					}
 				}
 
