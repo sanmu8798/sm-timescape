@@ -1,7 +1,7 @@
 <template>
 	<div class="page-destination-detail">
 		<!-- Header -->
-		<div class="detail-header">
+		<div class="public-detail-header">
 			<div class="detail-back" @click="router.back()">
 				<ChevronLeft :size="22" />
 			</div>
@@ -63,6 +63,41 @@
 				<div class="info-row">
 					<span class="info-label">城市</span>
 					<span class="info-value link" @click="goCity(attraction?.city_id)">{{ city?.name }}</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Guide -->
+		<div class="detail-section">
+			<div class="section-title">
+				<Ticket :size="16" />
+				<span>游玩攻略</span>
+			</div>
+			<div class="guide-card">
+				<div class="guide-row">
+					<Clock :size="14" />
+					<span class="guide-label">开放时间</span>
+					<span class="guide-value">{{ spotGuide.openTime }}</span>
+				</div>
+				<div class="guide-row">
+					<Ticket :size="14" />
+					<span class="guide-label">门票参考</span>
+					<span class="guide-value">{{ spotGuide.ticket }}</span>
+				</div>
+				<div class="guide-row">
+					<Calendar :size="14" />
+					<span class="guide-label">建议时长</span>
+					<span class="guide-value">{{ spotGuide.duration }}</span>
+				</div>
+				<div class="guide-row">
+					<MapPin :size="14" />
+					<span class="guide-label">最佳季节</span>
+					<span class="guide-value">{{ spotGuide.season }}</span>
+				</div>
+				<div class="guide-row">
+					<Camera :size="14" />
+					<span class="guide-label">打卡点位</span>
+					<span class="guide-value">{{ spotGuide.spot }}</span>
 				</div>
 			</div>
 		</div>
@@ -149,7 +184,7 @@
 		</div>
 
 		<!-- CheckIn CTA -->
-		<div class="detail-footer">
+		<div class="public-detail-footer">
 			<button class="checkin-btn" @click="goCheckIn">
 				<MapPin :size="18" />
 				<span>打卡这个景点</span>
@@ -165,7 +200,22 @@
 <script setup>
 import { computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { ChevronLeft, Share2, Star, MapPin, BookOpen, MessageCircle, UtensilsCrossed, Award, Heart, MessageSquare } from "lucide-vue-next"
+import {
+	ChevronLeft,
+	Share2,
+	Star,
+	MapPin,
+	BookOpen,
+	MessageCircle,
+	UtensilsCrossed,
+	Award,
+	Heart,
+	MessageSquare,
+	Ticket,
+	Clock,
+	Calendar,
+	Camera,
+} from "lucide-vue-next"
 import { getAttractionById, getCityById, getFoodsByCityId } from "@/mock/destinations"
 import { getBadgesByCityId } from "@/mock/badges"
 import { getCommentsByTarget } from "@/mock/comments"
@@ -183,6 +233,10 @@ const commentCount = computed(() => comments.value.length)
 const checkins = computed(() => getCheckinsByTarget("attraction", attractionId.value))
 const checkinCount = computed(() => checkins.value.length)
 const cityBadges = computed(() => getBadgesByCityId(attraction.value?.city_id).filter((item) => item.progress > 0 || item.id <= 6))
+
+const spotGuide = computed(
+	() => attraction.value?.guide || { openTime: "08:00-18:00", ticket: "请查询官方信息", duration: "2-3小时", season: "春秋两季", spot: "核心景区" },
+)
 
 function goCity(id) {
 	router.push({ name: "PageCityDetail", params: { id } })
@@ -222,40 +276,6 @@ function handleShare() {
 	padding-bottom: 100px;
 	position: relative;
 	overflow-x: hidden;
-
-	.detail-header {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 12px 16px;
-		max-width: 430px;
-		margin: 0 auto;
-		color: #fff;
-		background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
-
-		.detail-back,
-		.detail-action {
-			width: 36px;
-			height: 36px;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.12);
-			backdrop-filter: blur(10px);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-		}
-
-		.detail-title {
-			font-size: 16px;
-			font-weight: 600;
-		}
-	}
 
 	.destination-hero {
 		position: relative;
@@ -415,6 +435,42 @@ function handleShare() {
 					color: var(--accent-gold);
 					cursor: pointer;
 				}
+			}
+		}
+	}
+
+	.guide-card {
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-xl);
+		padding: 16px 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+
+		.guide-row {
+			display: flex;
+			align-items: flex-start;
+			gap: 10px;
+			font-size: 13px;
+
+			svg {
+				color: var(--accent-gold);
+				flex-shrink: 0;
+				margin-top: 2px;
+			}
+
+			.guide-label {
+				color: var(--text-tertiary);
+				flex-shrink: 0;
+				width: 64px;
+			}
+
+			.guide-value {
+				color: var(--text-secondary);
+				line-height: 1.5;
+				flex: 1;
+				text-align: right;
 			}
 		}
 	}
@@ -674,52 +730,6 @@ function handleShare() {
 					}
 				}
 			}
-		}
-	}
-
-	.detail-footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: 12px 20px 24px;
-		background: linear-gradient(to top, var(--bg-primary), transparent);
-		max-width: 430px;
-		margin: 0 auto;
-		z-index: 50;
-		display: flex;
-		gap: 10px;
-
-		.checkin-btn {
-			flex: 1;
-			padding: 15px;
-			border: none;
-			border-radius: var(--radius-md);
-			background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-			color: #fff;
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-		}
-
-		.comment-btn {
-			padding: 15px 20px;
-			border: 1px solid var(--border-color);
-			border-radius: var(--radius-md);
-			background: var(--bg-card);
-			color: var(--text-secondary);
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
 		}
 	}
 }

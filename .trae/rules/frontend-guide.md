@@ -191,7 +191,7 @@ const res = await get("/api/v1/manager/order/items")
 
 ### 5.3 样式变量使用
 
-统一样式变量定义在对应项目的 `base.css` 中，使用时通过 CSS 变量引用：
+统一样式变量定义在对应项目的 `@/assets/css/base.css` 中，使用时通过 CSS 变量引用：
 
 ```less
 // ✅ 正确：使用 CSS 变量
@@ -228,7 +228,7 @@ const res = await get("/api/v1/manager/order/items")
 
 ### 5.4 样式文件位置
 
-基础样式及变量定义在 `src/style.css` 中，请多采用变量开发页面，减少硬编码样式，如果已有的变量样式不符合需求，可以添加新的变量，但是禁止更改已有的变量。
+基础样式及变量定义在 `@/assets/css/base.css` 中，请多采用变量开发页面，减少硬编码样式，如果已有的变量样式不符合需求，可以添加新的变量，但是禁止更改已有的变量。
 
 ### 5.5 常用 CSS 变量
 
@@ -262,6 +262,7 @@ const res = await get("/api/v1/manager/order/items")
 1、能使用css变量的就尽量使用css变量，避免使用硬编码样式值
 2、如果是移动端的页面，就不要定义hover等伪类样式，因为移动端没有鼠标悬停事件
 3、如果没有要求，就不需要定义响应式样式
+4、如果是重复样式的话，定义在 `src/assets/css/main.less` 中，且样式类名要添加前缀 `public-`，其他页面直接引用即可
 
 ---
 

@@ -197,7 +197,7 @@
 						<div class="footprint-node"></div>
 						<div class="footprint-month" v-if="showMonthLabel(id)">{{ formatMonth(item.time) }}</div>
 					</div>
-					<div class="footprint-card" @click="goAttraction(item.id)">
+					<div class="footprint-card" @click="goFootprint(item)">
 						<img :src="item.image" :alt="item.name" class="footprint-img" loading="lazy" />
 						<div class="footprint-info">
 							<div class="footprint-name">{{ item.name }}</div>
@@ -271,6 +271,24 @@ const goLogin = () => router.push({ name: "PageLogin" })
 const goCity = (id) => router.push({ name: "PageCityDetail", params: { id } })
 const goFood = (id) => router.push({ name: "PageFoodDetail", params: { id } })
 const goAttraction = (id) => router.push({ name: "PageDestinationDetail", params: { id } })
+const goCustom = (id) => router.push({ name: "PageCustomDetail", params: { id } })
+
+const goFootprint = (item) => {
+	switch (item.type) {
+		case "city":
+			goCity(item.id)
+			break
+		case "food":
+			goFood(item.id)
+			break
+		case "custom":
+			goCustom(item.id)
+			break
+		case "attraction":
+		default:
+			goAttraction(item.id)
+	}
+}
 const goDiscover = () => router.push({ name: "PageDiscover" })
 const goDiscoverFood = () => router.push({ name: "PageDiscover", query: { tab: "food" } })
 const goBadges = () => router.push({ name: "PageBadges" })
@@ -517,7 +535,7 @@ const goCheckInRecord = () => router.push({ name: "PageCheckInRecord" })
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-
+			margin-bottom: 15px;
 			.section-title {
 				font-size: 18px;
 				font-weight: 700;

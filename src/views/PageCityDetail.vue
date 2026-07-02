@@ -1,7 +1,7 @@
 <template>
 	<div class="page-city-detail">
 		<!-- Header -->
-		<div class="detail-header">
+		<div class="public-detail-header">
 			<div class="detail-back" @click="router.back()">
 				<ChevronLeft :size="22" />
 			</div>
@@ -45,6 +45,35 @@
 			<div class="stat-card">
 				<div class="stat-value">{{ cityBadges.length }}</div>
 				<div class="stat-label">徽章</div>
+			</div>
+		</div>
+
+		<!-- Impression -->
+		<div class="detail-section">
+			<div class="section-title">
+				<Compass :size="16" />
+				<span>城市印象</span>
+			</div>
+			<div class="impression-grid">
+				<div class="impression-card">
+					<Calendar :size="18" />
+					<span class="impression-label">最佳季节</span>
+					<span class="impression-value">{{ cityImpression.bestTime }}</span>
+				</div>
+				<div class="impression-card">
+					<Clock :size="18" />
+					<span class="impression-label">建议天数</span>
+					<span class="impression-value">{{ cityImpression.duration }}</span>
+				</div>
+				<div class="impression-card">
+					<Bus :size="18" />
+					<span class="impression-label">城市交通</span>
+					<span class="impression-value">{{ cityImpression.transport }}</span>
+				</div>
+			</div>
+			<div class="impression-tip">
+				<MapPin :size="14" />
+				<span>{{ cityImpression.tip }}</span>
 			</div>
 		</div>
 
@@ -171,7 +200,7 @@
 		</div>
 
 		<!-- CheckIn CTA -->
-		<div class="detail-footer">
+		<div class="public-detail-footer">
 			<button class="checkin-btn" @click="goCheckIn">
 				<MapPin :size="18" />
 				<span>打卡这座城市</span>
@@ -201,6 +230,10 @@ import {
 	MessageCircle,
 	MessageSquare,
 	Heart,
+	Compass,
+	Calendar,
+	Clock,
+	Bus,
 } from "lucide-vue-next"
 import { getCityById, getAttractionsByCityId, getFoodsByCityId, getCustomsByCityId } from "@/mock/destinations"
 import { getBadgesByCityId } from "@/mock/badges"
@@ -217,6 +250,10 @@ const customs = computed(() => getCustomsByCityId(cityId.value))
 const comments = computed(() => getCommentsByTarget("city", cityId.value))
 const commentCount = computed(() => comments.value.length)
 const cityBadges = computed(() => getBadgesByCityId(cityId.value).filter((item) => item.progress > 0 || item.id <= 6))
+
+const cityImpression = computed(
+	() => city.value?.guide || { bestTime: "春秋两季", duration: "3-4天", transport: "公共交通", tip: "提前规划路线，错峰出行" },
+)
 
 function goAttraction(id) {
 	router.push({ name: "PageDestinationDetail", params: { id } })
@@ -257,40 +294,6 @@ function handleShare() {
 	padding-bottom: 100px;
 	position: relative;
 	overflow-x: hidden;
-
-	.detail-header {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 12px 16px;
-		max-width: 430px;
-		margin: 0 auto;
-		color: #fff;
-		background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
-
-		.detail-back,
-		.detail-action {
-			width: 36px;
-			height: 36px;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.12);
-			backdrop-filter: blur(10px);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-		}
-
-		.detail-title {
-			font-size: 16px;
-			font-weight: 600;
-		}
-	}
 
 	.city-hero {
 		position: relative;
@@ -419,6 +422,60 @@ function handleShare() {
 		line-height: 1.8;
 		font-size: 14px;
 		color: var(--text-secondary);
+	}
+
+	.impression-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 10px;
+		margin-bottom: 12px;
+
+		.impression-card {
+			background: var(--bg-card);
+			border: 1px solid var(--border-color);
+			border-radius: var(--radius-lg);
+			padding: 16px 10px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 6px;
+			text-align: center;
+
+			svg {
+				color: var(--accent-gold);
+				margin-bottom: 2px;
+			}
+
+			.impression-label {
+				font-size: 11px;
+				color: var(--text-tertiary);
+			}
+
+			.impression-value {
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--text-primary);
+			}
+		}
+	}
+
+	.impression-tip {
+		background: rgba(212, 168, 67, 0.08);
+		border: 1px solid rgba(212, 168, 67, 0.15);
+		border-radius: var(--radius-lg);
+		padding: 12px 14px;
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		font-size: 13px;
+		color: var(--text-secondary);
+		line-height: 1.5;
+
+		svg {
+			color: var(--accent-gold);
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
 	}
 
 	.section-count {
@@ -729,52 +786,6 @@ function handleShare() {
 					}
 				}
 			}
-		}
-	}
-
-	.detail-footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: 12px 20px 24px;
-		background: linear-gradient(to top, var(--bg-primary), transparent);
-		max-width: 430px;
-		margin: 0 auto;
-		z-index: 50;
-		display: flex;
-		gap: 10px;
-
-		.checkin-btn {
-			flex: 1;
-			padding: 15px;
-			border: none;
-			border-radius: var(--radius-md);
-			background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-			color: #fff;
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-		}
-
-		.comment-btn {
-			padding: 15px 20px;
-			border: 1px solid var(--border-color);
-			border-radius: var(--radius-md);
-			background: var(--bg-card);
-			color: var(--text-secondary);
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
 		}
 	}
 }

@@ -48,3 +48,7 @@ export function syncUserStats() {
 	profile.visited_progress = +(profile.visited_provinces / provinces.length).toFixed(2)
 	profile.badge_count = badges.filter((item) => item.progress >= 1).length
 }
+
+export function updateProfile(data) {
+	Object.assign(profile, data)
+}

@@ -451,7 +451,7 @@ function handleSubmit() {
 		left: 0;
 		right: 0;
 		padding: 12px 20px 24px;
-		background: linear-gradient(to top, var(--bg-primary), transparent);
+		background: var(--bg-primary);
 		max-width: 430px;
 		margin: 0 auto;
 		z-index: 50;

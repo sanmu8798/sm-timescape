@@ -13,6 +13,9 @@ import PageCheckIn from "@/views/PageCheckIn.vue"
 import PageCheckInRecord from "@/views/PageCheckInRecord.vue"
 import PageBadges from "@/views/PageBadges.vue"
 import PageComments from "@/views/PageComments.vue"
+import PageEditProfile from "@/views/PageEditProfile.vue"
+import PageFavorites from "@/views/PageFavorites.vue"
+import PageMyPosts from "@/views/PageMyPosts.vue"
 
 const routes = [
 	{ path: "/", redirect: { name: "PageIndex" } },
@@ -29,6 +32,9 @@ const routes = [
 	{ path: "/check-in-record", name: "PageCheckInRecord", component: PageCheckInRecord, meta: { title: "足迹时间线" } },
 	{ path: "/badges", name: "PageBadges", component: PageBadges, meta: { title: "成就徽章" } },
 	{ path: "/comments", name: "PageComments", component: PageComments, meta: { title: "评价" } },
+	{ path: "/profile/edit", name: "PageEditProfile", component: PageEditProfile, meta: { title: "编辑资料" } },
+	{ path: "/profile/favorites", name: "PageFavorites", component: PageFavorites, meta: { title: "我的收藏" } },
+	{ path: "/profile/posts", name: "PageMyPosts", component: PageMyPosts, meta: { title: "我的动态" } },
 ]
 
 // 根据环境变量选择路由模式

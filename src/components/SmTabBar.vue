@@ -16,20 +16,19 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from "vue"
-import { useVibrate } from "@/hooks"
+import { reactive, watch, onMounted } from "vue"
 import { useRouter, useRoute } from "vue-router"
 
 import tababr_bb from "@/assets/images/tab-bar-bb.png"
-import bill from "@/assets/images/bill.png"
-import activeBill from "@/assets/images/bill-active.png"
-import chart from "@/assets/images/chart.png"
-import activeChart from "@/assets/images/chart-active.png"
-import activeAccounting from "@/assets/images/accounting-active.png"
-import asset from "@/assets/images/asset.png"
-import activeAsset from "@/assets/images/asset-active.png"
+import home from "@/assets/images/home.png"
+import homeActive from "@/assets/images/home-active.png"
+import discover from "@/assets/images/discover.png"
+import discoverActive from "@/assets/images/discover-active.png"
+import addActive from "@/assets/images/add-active.png"
+import square from "@/assets/images/square.png"
+import squareActive from "@/assets/images/square-active.png"
 import my from "@/assets/images/my.png"
-import activeMy from "@/assets/images/my-active.png"
+import myActive from "@/assets/images/my-active.png"
 
 const router = useRouter()
 const route = useRoute()
@@ -41,32 +40,32 @@ const state = reactive({
 			pagePath: "/index",
 			pageName: "PageIndex",
 			text: "首页",
-			icon: bill,
-			activeIcon: activeBill,
+			icon: home,
+			activeIcon: homeActive,
 			showStyle: false,
 		},
 		{
 			pagePath: "/discover",
 			pageName: "PageDiscover",
 			text: "发现",
-			icon: chart,
-			activeIcon: activeChart,
+			icon: discover,
+			activeIcon: discoverActive,
 			showStyle: false,
 		},
 		{
 			pagePath: "",
 			pageName: "",
 			text: "打卡",
-			icon: activeAccounting,
-			activeIcon: activeAccounting,
+			icon: addActive,
+			activeIcon: addActive,
 			showStyle: true,
 		},
 		{
 			pagePath: "/square",
 			pageName: "PageSquare",
 			text: "广场",
-			icon: asset,
-			activeIcon: activeAsset,
+			icon: square,
+			activeIcon: squareActive,
 			showStyle: false,
 		},
 		{
@@ -74,7 +73,7 @@ const state = reactive({
 			pageName: "PageProfile",
 			text: "我的",
 			icon: my,
-			activeIcon: activeMy,
+			activeIcon: myActive,
 			showStyle: false,
 		},
 	],
@@ -88,6 +87,13 @@ const processPage = () => {
 }
 processPage()
 
+watch(
+	() => route.name,
+	() => {
+		processPage()
+	},
+)
+
 const switchTab = (index, pageName) => {
 	if (index === 2) {
 		router.push({ name: "PageCheckIn" })
@@ -95,11 +101,10 @@ const switchTab = (index, pageName) => {
 		state.currentTabbarIndex = index
 		router.push({ name: pageName })
 	}
-	useVibrate()
 }
 
 onMounted(() => {
-	switchTab(state.currentTabbarIndex, state.tabbarData[state.currentTabbarIndex]?.pageName)
+	processPage()
 })
 </script>
 
@@ -124,6 +129,7 @@ onMounted(() => {
 		height: 60px;
 	}
 	.tab-bar-item {
+		margin-left: -1px; //为了解决深色背景下，每个item之间看起来好像有一点空隙间距
 		flex: 1;
 		z-index: 2000;
 		text-align: center;
@@ -143,11 +149,11 @@ onMounted(() => {
 		}
 		.tab-bar-top-active {
 			position: absolute;
-			top: -1px;
+			top: -2px;
 			left: 50%;
 			width: 619px;
 			height: 39px;
-			margin-left: -309.5px;
+			transform: translateX(-50%);
 		}
 		.tab-bar-top {
 			position: absolute;

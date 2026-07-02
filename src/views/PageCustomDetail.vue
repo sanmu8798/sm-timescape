@@ -1,7 +1,7 @@
 <template>
 	<div class="page-custom-detail">
 		<!-- Header -->
-		<div class="detail-header">
+		<div class="public-detail-header">
 			<div class="detail-back" @click="router.back()">
 				<ChevronLeft :size="22" />
 			</div>
@@ -68,6 +68,56 @@
 					<span class="info-label">标签</span>
 					<span class="info-value">{{ custom?.tags?.join(" · ") }}</span>
 				</div>
+			</div>
+		</div>
+
+		<!-- Guide -->
+		<div class="detail-section">
+			<div class="section-title">
+				<ScrollText :size="16" />
+				<span>体验指南</span>
+			</div>
+			<div class="guide-timeline">
+				<div class="guide-step">
+					<div class="step-dot"><MapPin :size="12" /></div>
+					<div class="step-content">
+						<div class="step-label">体验地点</div>
+						<div class="step-value">{{ customGuide.location }}</div>
+					</div>
+				</div>
+				<div class="guide-step">
+					<div class="step-dot"><Users :size="12" /></div>
+					<div class="step-content">
+						<div class="step-label">适合人群</div>
+						<div class="step-value">{{ customGuide.crowd }}</div>
+					</div>
+				</div>
+				<div class="guide-step">
+					<div class="step-dot"><Clock :size="12" /></div>
+					<div class="step-content">
+						<div class="step-label">体验时长</div>
+						<div class="step-value">{{ customGuide.duration }}</div>
+					</div>
+				</div>
+				<div class="guide-step">
+					<div class="step-dot"><Calendar :size="12" /></div>
+					<div class="step-content">
+						<div class="step-label">最佳时节</div>
+						<div class="step-value">{{ customGuide.season }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Culture -->
+		<div class="detail-section">
+			<div class="section-title">
+				<Sparkles :size="16" />
+				<span>文化意义</span>
+			</div>
+			<div class="culture-quote">
+				<BookOpen :size="16" />
+				<p>{{ customGuide.meaning }}</p>
 			</div>
 		</div>
 
@@ -173,7 +223,7 @@
 		</div>
 
 		<!-- CheckIn CTA -->
-		<div class="detail-footer">
+		<div class="public-detail-footer">
 			<button class="checkin-btn" @click="goCheckIn">
 				<MapPin :size="18" />
 				<span>打卡这项风俗</span>
@@ -189,7 +239,25 @@
 <script setup>
 import { computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { ChevronLeft, Share2, Star, Info, BookOpen, MessageCircle, UtensilsCrossed, Mountain, Award, Heart, MessageSquare } from "lucide-vue-next"
+import {
+	ChevronLeft,
+	Share2,
+	Star,
+	Info,
+	BookOpen,
+	MessageCircle,
+	UtensilsCrossed,
+	Mountain,
+	Award,
+	Heart,
+	MessageSquare,
+	MapPin,
+	Users,
+	Clock,
+	Calendar,
+	ScrollText,
+	Sparkles,
+} from "lucide-vue-next"
 import { getCustomById, getCityById, getFoodsByCityId, getAttractionsByCityId } from "@/mock/destinations"
 import { getBadgesByCityId } from "@/mock/badges"
 import { getCommentsByTarget } from "@/mock/comments"
@@ -208,6 +276,17 @@ const commentCount = computed(() => comments.value.length)
 const checkins = computed(() => getCheckinsByTarget("custom", customId.value))
 const checkinCount = computed(() => checkins.value.length)
 const cityBadges = computed(() => getBadgesByCityId(custom.value?.city_id).filter((item) => item.progress > 0 || item.id <= 6))
+
+const customGuide = computed(
+	() =>
+		custom.value?.guide || {
+			location: "当地文化场馆或民俗街区",
+			crowd: "所有年龄层",
+			duration: "1-2小时",
+			season: "建议提前查询活动时间",
+			meaning: "每一项地方风俗都是地域文化的活态传承，值得用心体验。",
+		},
+)
 
 function goCity(id) {
 	router.push({ name: "PageCityDetail", params: { id } })
@@ -251,40 +330,6 @@ function handleShare() {
 	padding-bottom: 100px;
 	position: relative;
 	overflow-x: hidden;
-
-	.detail-header {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 12px 16px;
-		max-width: 430px;
-		margin: 0 auto;
-		color: #fff;
-		background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
-
-		.detail-back,
-		.detail-action {
-			width: 36px;
-			height: 36px;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.12);
-			backdrop-filter: blur(10px);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-		}
-
-		.detail-title {
-			font-size: 16px;
-			font-weight: 600;
-		}
-	}
 
 	.custom-hero {
 		position: relative;
@@ -456,6 +501,89 @@ function handleShare() {
 		line-height: 1.8;
 		font-size: 14px;
 		color: var(--text-secondary);
+	}
+
+	.guide-timeline {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-xl);
+		padding: 20px;
+
+		.guide-step {
+			display: flex;
+			align-items: flex-start;
+			gap: 14px;
+			padding: 14px 0;
+			position: relative;
+
+			&:not(:last-child) {
+				border-bottom: 1px solid var(--border-color);
+			}
+
+			&:first-child {
+				padding-top: 0;
+			}
+
+			&:last-child {
+				padding-bottom: 0;
+			}
+
+			.step-dot {
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				background: rgba(139, 92, 246, 0.12);
+				border: 1px solid rgba(139, 92, 246, 0.2);
+				color: var(--accent-purple);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			.step-content {
+				flex: 1;
+				min-width: 0;
+
+				.step-label {
+					font-size: 12px;
+					color: var(--text-tertiary);
+					margin-bottom: 4px;
+				}
+
+				.step-value {
+					font-size: 13px;
+					color: var(--text-secondary);
+					line-height: 1.5;
+				}
+			}
+		}
+	}
+
+	.culture-quote {
+		background: rgba(139, 92, 246, 0.08);
+		border: 1px solid rgba(139, 92, 246, 0.15);
+		border-radius: var(--radius-xl);
+		padding: 18px 20px;
+		display: flex;
+		gap: 12px;
+
+		svg {
+			color: var(--accent-purple);
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
+
+		p {
+			flex: 1;
+			font-size: 14px;
+			color: var(--text-secondary);
+			line-height: 1.8;
+			margin: 0;
+		}
 	}
 
 	.comment-list {
@@ -703,52 +831,6 @@ function handleShare() {
 					}
 				}
 			}
-		}
-	}
-
-	.detail-footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: 12px 20px 24px;
-		background: linear-gradient(to top, var(--bg-primary), transparent);
-		max-width: 430px;
-		margin: 0 auto;
-		z-index: 50;
-		display: flex;
-		gap: 10px;
-
-		.checkin-btn {
-			flex: 1;
-			padding: 15px;
-			border: none;
-			border-radius: var(--radius-md);
-			background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-			color: #fff;
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-		}
-
-		.comment-btn {
-			padding: 15px 20px;
-			border: 1px solid var(--border-color);
-			border-radius: var(--radius-md);
-			background: var(--bg-card);
-			color: var(--text-secondary);
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
 		}
 	}
 }

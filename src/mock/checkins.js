@@ -1,7 +1,24 @@
 import { reactive } from "vue"
 import cityImage from "@/assets/images/city.jpg"
+import foodImage from "@/assets/images/food.jpg"
+import scenicImage from "@/assets/images/scenic_spot.jpg"
+import customsImage from "@/assets/images/customs.jpg"
 
 const USER_ID = "1"
+
+function getImageByType(targetType) {
+	switch (targetType) {
+		case "food":
+			return foodImage
+		case "attraction":
+			return scenicImage
+		case "custom":
+			return customsImage
+		case "city":
+		default:
+			return cityImage
+	}
+}
 
 export const checkins = reactive([
 	{
@@ -12,7 +29,7 @@ export const checkins = reactive([
 		target_name: "故宫博物院",
 		city_id: 1,
 		content: "站在太和殿前，真正感受到了什么叫做皇家气派。紫禁城六百年，一砖一瓦皆是故事。",
-		images: [cityImage, cityImage],
+		images: [scenicImage, scenicImage],
 		location: "北京市东城区景山前街4号",
 		create_time: "2026-06-20 10:30",
 		like_count: 256,
@@ -26,7 +43,7 @@ export const checkins = reactive([
 		target_name: "北京烤鸭",
 		city_id: 1,
 		content: "第一次吃正宗的果木烤鸭，皮脆肉嫩，蘸白糖的吃法打开了新世界的大门。",
-		images: [cityImage],
+		images: [foodImage],
 		location: "全聚德烤鸭店（前门店）",
 		create_time: "2026-06-19 19:20",
 		like_count: 128,
@@ -40,7 +57,7 @@ export const checkins = reactive([
 		target_name: "宽窄巷子",
 		city_id: 3,
 		content: "在宽巷子找了家老茶馆坐了一下午，盖碗茶、掏耳朵、看变脸，成都的节奏真的太巴适了。",
-		images: [cityImage, cityImage, cityImage],
+		images: [scenicImage, scenicImage, scenicImage],
 		location: "四川省成都市青羊区宽窄巷子",
 		create_time: "2026-06-15 15:45",
 		like_count: 189,
@@ -54,7 +71,7 @@ export const checkins = reactive([
 		target_name: "西湖风景名胜区",
 		city_id: 2,
 		content: "断桥残雪没看到雪，但苏堤春晓的柳树已经足够美了。西湖果然是人间天堂。",
-		images: [cityImage, cityImage],
+		images: [scenicImage, scenicImage],
 		location: "浙江省杭州市西湖区龙井路1号",
 		create_time: "2026-05-10 09:10",
 		like_count: 312,
@@ -68,7 +85,7 @@ export const checkins = reactive([
 		target_name: "秦始皇兵马俑博物馆",
 		city_id: 5,
 		content: "一号坑的军阵太震撼了，每一个陶俑的表情都不一样，两千年前的工艺让人叹为观止。",
-		images: [cityImage],
+		images: [scenicImage],
 		location: "陕西省西安市临潼区秦陵北路",
 		create_time: "2026-04-05 11:20",
 		like_count: 423,
@@ -82,7 +99,7 @@ export const checkins = reactive([
 		target_name: "重庆火锅",
 		city_id: 6,
 		content: "九宫格牛油锅底越煮越香，毛肚七上八下刚刚好，这才是正宗的重庆味道。",
-		images: [cityImage, cityImage],
+		images: [foodImage, foodImage],
 		location: "珮姐老火锅（较场口店）",
 		create_time: "2026-03-22 19:00",
 		like_count: 167,
@@ -96,7 +113,7 @@ export const checkins = reactive([
 		target_name: "川剧变脸",
 		city_id: 3,
 		content: "在蜀风雅韵看了一场川剧，变脸的速度快得让人目不暇接，现场掌声不断。",
-		images: [cityImage],
+		images: [customsImage],
 		location: "成都蜀风雅韵剧院",
 		create_time: "2026-03-10 20:30",
 		like_count: 98,
@@ -124,7 +141,7 @@ export const checkins = reactive([
 		target_name: "八达岭长城",
 		city_id: 1,
 		content: "不到长城非好汉。站在烽火台上远眺群山，才真正读懂这座雄关六百年来的守望。",
-		images: [cityImage, cityImage],
+		images: [scenicImage, scenicImage],
 		location: "北京市延庆区G6京藏高速58号出口",
 		create_time: "2026-06-18 14:10",
 		like_count: 198,
@@ -138,7 +155,7 @@ export const checkins = reactive([
 		target_name: "天坛公园",
 		city_id: 1,
 		content: "祈年殿的蓝瓦金顶在晨光里太庄严了，回音壁前小声说话真的能听到回声。",
-		images: [cityImage],
+		images: [scenicImage],
 		location: "北京市东城区天坛东里甲1号",
 		create_time: "2026-06-17 09:40",
 		like_count: 156,
@@ -152,7 +169,7 @@ export const checkins = reactive([
 		target_name: "老北京炸酱面",
 		city_id: 1,
 		content: "海碗居的炸酱面酱香浓郁，配上黄瓜丝和豆芽，一碗下肚全是老北京的烟火气。",
-		images: [cityImage],
+		images: [foodImage],
 		location: "海碗居（增光路店）",
 		create_time: "2026-06-16 12:30",
 		like_count: 112,
@@ -166,7 +183,7 @@ export const checkins = reactive([
 		target_name: "京剧",
 		city_id: 1,
 		content: "在长安大戏院听了一场《霸王别姬》，西皮二黄的唱腔一开口，满堂彩。",
-		images: [cityImage, cityImage],
+		images: [customsImage, customsImage],
 		location: "北京长安大戏院",
 		create_time: "2026-06-14 19:30",
 		like_count: 178,
@@ -188,7 +205,7 @@ export function addCheckin(data) {
 		target_name: data.target_name || "",
 		city_id: Number(data.city_id),
 		content: data.content || "",
-		images: data.images?.length ? data.images : [cityImage],
+		images: data.images?.length ? data.images : [getImageByType(data.target_type)],
 		location: data.location || "",
 		create_time: data.create_time || create_time,
 		like_count: data.like_count || 0,

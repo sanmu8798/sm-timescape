@@ -1,7 +1,7 @@
 <template>
 	<div class="page-food-detail">
 		<!-- Header -->
-		<div class="detail-header">
+		<div class="public-detail-header">
 			<div class="detail-back" @click="router.back()">
 				<ChevronLeft :size="22" />
 			</div>
@@ -63,6 +63,45 @@
 				<div class="info-row">
 					<span class="info-label">城市</span>
 					<span class="info-value link" @click="goCity(food?.city_id)">{{ city?.name }}</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Guide -->
+		<div class="detail-section">
+			<div class="section-title">
+				<ChefHat :size="16" />
+				<span>探店攻略</span>
+			</div>
+			<div class="guide-card food-guide">
+				<div class="guide-row">
+					<Banknote :size="14" />
+					<span class="guide-label">人均消费</span>
+					<span class="guide-value">{{ foodGuide.price }}</span>
+				</div>
+				<div class="guide-row">
+					<Clock :size="14" />
+					<span class="guide-label">营业时间</span>
+					<span class="guide-value">{{ foodGuide.hours }}</span>
+				</div>
+				<div class="guide-row">
+					<Flame :size="14" />
+					<span class="guide-label">口味特点</span>
+					<span class="guide-value">{{ foodGuide.taste }}</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Must Try -->
+		<div class="detail-section">
+			<div class="section-title">
+				<ThumbsUp :size="16" />
+				<span>招牌推荐</span>
+			</div>
+			<div class="must-try-list">
+				<div v-for="(dish, idx) in foodGuide.mustTry" :key="idx" class="must-try-item">
+					<span class="must-try-rank">{{ idx + 1 }}</span>
+					<span class="must-try-name">{{ dish }}</span>
 				</div>
 			</div>
 		</div>
@@ -149,7 +188,7 @@
 		</div>
 
 		<!-- CheckIn CTA -->
-		<div class="detail-footer">
+		<div class="public-detail-footer">
 			<button class="checkin-btn" @click="goCheckIn">
 				<MapPin :size="18" />
 				<span>打卡这道美食</span>
@@ -165,7 +204,23 @@
 <script setup>
 import { computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { ChevronLeft, Share2, Star, Store, BookOpen, MessageCircle, Mountain, Award, Heart, MessageSquare } from "lucide-vue-next"
+import {
+	ChevronLeft,
+	Share2,
+	Star,
+	Store,
+	BookOpen,
+	MessageCircle,
+	Mountain,
+	Award,
+	Heart,
+	MessageSquare,
+	Banknote,
+	Clock,
+	Flame,
+	ThumbsUp,
+	ChefHat,
+} from "lucide-vue-next"
 import { getFoodById, getCityById, getAttractionsByCityId } from "@/mock/destinations"
 import { getBadgesByCityId } from "@/mock/badges"
 import { getCommentsByTarget } from "@/mock/comments"
@@ -183,6 +238,10 @@ const commentCount = computed(() => comments.value.length)
 const checkins = computed(() => getCheckinsByTarget("food", foodId.value))
 const checkinCount = computed(() => checkins.value.length)
 const cityBadges = computed(() => getBadgesByCityId(food.value?.city_id).filter((item) => item.progress > 0 || item.id <= 6))
+
+const foodGuide = computed(
+	() => food.value?.guide || { price: "约80元/人", hours: "11:00-21:00", taste: "地方特色，值得品尝", mustTry: ["招牌菜", "特色小食"] },
+)
 
 function goCity(id) {
 	router.push({ name: "PageCityDetail", params: { id } })
@@ -222,40 +281,6 @@ function handleShare() {
 	padding-bottom: 100px;
 	position: relative;
 	overflow-x: hidden;
-
-	.detail-header {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 12px 16px;
-		max-width: 430px;
-		margin: 0 auto;
-		color: #fff;
-		background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
-
-		.detail-back,
-		.detail-action {
-			width: 36px;
-			height: 36px;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.12);
-			backdrop-filter: blur(10px);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-		}
-
-		.detail-title {
-			font-size: 16px;
-			font-weight: 600;
-		}
-	}
 
 	.food-hero {
 		position: relative;
@@ -427,6 +452,79 @@ function handleShare() {
 		line-height: 1.8;
 		font-size: 14px;
 		color: var(--text-secondary);
+	}
+
+	.guide-card {
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-xl);
+		padding: 16px 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+
+		&.food-guide {
+			.guide-row {
+				display: flex;
+				align-items: flex-start;
+				gap: 10px;
+				font-size: 13px;
+
+				svg {
+					color: var(--accent-red);
+					flex-shrink: 0;
+					margin-top: 2px;
+				}
+
+				.guide-label {
+					color: var(--text-tertiary);
+					flex-shrink: 0;
+					width: 64px;
+				}
+
+				.guide-value {
+					color: var(--text-secondary);
+					line-height: 1.5;
+					flex: 1;
+					text-align: right;
+				}
+			}
+		}
+	}
+
+	.must-try-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		.must-try-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			background: var(--bg-card);
+			border: 1px solid var(--border-color);
+			border-radius: var(--radius-lg);
+			padding: 10px 14px;
+
+			.must-try-rank {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				background: var(--accent-red);
+				color: #fff;
+				font-size: 11px;
+				font-weight: 700;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.must-try-name {
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--text-primary);
+			}
+		}
 	}
 
 	.comment-list {
@@ -674,52 +772,6 @@ function handleShare() {
 					}
 				}
 			}
-		}
-	}
-
-	.detail-footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: 12px 20px 24px;
-		background: linear-gradient(to top, var(--bg-primary), transparent);
-		max-width: 430px;
-		margin: 0 auto;
-		z-index: 50;
-		display: flex;
-		gap: 10px;
-
-		.checkin-btn {
-			flex: 1;
-			padding: 15px;
-			border: none;
-			border-radius: var(--radius-md);
-			background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-			color: #fff;
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-		}
-
-		.comment-btn {
-			padding: 15px 20px;
-			border: 1px solid var(--border-color);
-			border-radius: var(--radius-md);
-			background: var(--bg-card);
-			color: var(--text-secondary);
-			font-size: 15px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-			cursor: pointer;
 		}
 	}
 }

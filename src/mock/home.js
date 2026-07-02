@@ -1,6 +1,9 @@
 import { reactive } from "vue"
 import cityImage from "@/assets/images/city.jpg"
-import { cities, getAttractionById } from "./destinations"
+import foodImage from "@/assets/images/food.jpg"
+import scenicImage from "@/assets/images/scenic_spot.jpg"
+import customsImage from "@/assets/images/customs.jpg"
+import { cities, getAttractionById, getFoodById, getCustomById } from "./destinations"
 
 export const provinces = reactive([
 	{ name: "北京", abbr: "京", lit: true },
@@ -51,15 +54,15 @@ export const featuredCities = cities.map((item) => ({
 }))
 
 export const featuredFood = [
-	{ id: 201, name: "北京烤鸭", origin: "北京", image: cityImage, rating: 4.8, checkIns: "5.8万", status: "done", statusText: "已解锁" },
-	{ id: 211, name: "重庆火锅", origin: "重庆", image: cityImage, rating: 4.8, checkIns: "6.3万", status: "done", statusText: "已解锁" },
-	{ id: 209, name: "腊汁肉夹馍", origin: "陕西", image: cityImage, rating: 4.7, checkIns: "4.1万", status: "new", statusText: "待探索" },
-	{ id: 207, name: "广式早茶", origin: "广州", image: cityImage, rating: 4.8, checkIns: "3.9万", status: "new", statusText: "待探索" },
+	{ id: 201, name: "北京烤鸭", origin: "北京", image: foodImage, rating: 4.8, checkIns: "5.8万", status: "done", statusText: "已解锁" },
+	{ id: 211, name: "重庆火锅", origin: "重庆", image: foodImage, rating: 4.8, checkIns: "6.3万", status: "done", statusText: "已解锁" },
+	{ id: 209, name: "腊汁肉夹馍", origin: "陕西", image: foodImage, rating: 4.7, checkIns: "4.1万", status: "new", statusText: "待探索" },
+	{ id: 207, name: "广式早茶", origin: "广州", image: foodImage, rating: 4.8, checkIns: "3.9万", status: "new", statusText: "待探索" },
 ]
 
 export const recentFootprints = [
-	{ id: 101, name: getAttractionById(101)?.name, city_id: 1, city: "北京", time: "2026-06-20", image: cityImage },
-	{ id: 107, name: getAttractionById(107)?.name, city_id: 3, city: "成都", time: "2026-06-15", image: cityImage },
-	{ id: 104, name: getAttractionById(104)?.name, city_id: 2, city: "杭州", time: "2026-05-10", image: cityImage },
-	{ id: 113, name: getAttractionById(113)?.name, city_id: 5, city: "西安", time: "2026-04-05", image: cityImage },
+	{ id: 1, type: "city", name: "北京", city_id: 1, city: "北京", time: "2026-06-20", image: cityImage },
+	{ id: 101, type: "attraction", name: getAttractionById(101)?.name, city_id: 1, city: "北京", time: "2026-06-18", image: scenicImage },
+	{ id: 201, type: "food", name: getFoodById(201)?.name, city_id: 1, city: "北京", time: "2026-05-16", image: foodImage },
+	{ id: 301, type: "custom", name: getCustomById(301)?.name, city_id: 1, city: "北京", time: "2026-04-14", image: customsImage },
 ]
